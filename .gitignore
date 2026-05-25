@@ -17,6 +17,7 @@ env/
 .env
 *.env
 .claude
+.tmp
 
 # Jupyter
 .ipynb_checkpoints/
