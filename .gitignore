@@ -32,9 +32,11 @@ data/annotations/*
 !data/annotations/.gitkeep
 
 # Results
-results/models/*.pth
-results/models/*.pt
-results/models/*.h5
+results/models/**/*.pth
+results/models/**/*.pt
+results/models/**/*.h5
+results/models/**/*.pkl
+results/models/**/*.xml
 
 # OS
 .DS_Store
