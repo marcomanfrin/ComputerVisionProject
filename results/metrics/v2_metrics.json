@@ -1,9 +1,9 @@
 {
   "model": "V2_CustomCNN",
-  "accuracy": 0.9964,
-  "precision": 0.9964,
-  "recall": 0.9964,
-  "f1": 0.9964,
-  "best_epoch": 51,
-  "training_time_min": 34.01
+  "accuracy": 0.9966,
+  "precision": 0.9966,
+  "recall": 0.9966,
+  "f1": 0.9966,
+  "best_epoch": 80,
+  "training_time_min": 294.14
 }
