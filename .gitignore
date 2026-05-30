@@ -37,6 +37,8 @@ results/models/**/*.pt
 results/models/**/*.h5
 results/models/**/*.pkl
 results/models/**/*.xml
+results/models/**/*.npz
+results/models/**/embeddings/
 
 # OS
 .DS_Store

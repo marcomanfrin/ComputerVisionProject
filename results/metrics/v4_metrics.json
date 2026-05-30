@@ -1,0 +1,33 @@
+{
+  "model": "V4_DINOv3_FrozenBackbone",
+  "backbone": "facebook/dinov3-vitb16-pretrain-lvd1689m",
+  "embedding_dim": 768,
+  "extract_time_min": 12.49,
+  "backbone_params": 85660416,
+  "trainable_params": 0,
+  "knn": {
+    "k": 20,
+    "metric": "cosine",
+    "accuracy": 0.9825,
+    "precision": 0.983,
+    "recall": 0.9825,
+    "f1": 0.9824,
+    "fit_time_s": 0.01,
+    "pred_time_s": 2.95
+  },
+  "linear_probe": {
+    "C": 1.0,
+    "max_iter": 1000,
+    "accuracy": 0.9835,
+    "precision": 0.9839,
+    "recall": 0.9835,
+    "f1": 0.9835,
+    "fit_time_s": 1.95,
+    "pred_time_s": 0.01
+  },
+  "accuracy": 0.9835,
+  "precision": 0.9839,
+  "recall": 0.9835,
+  "f1": 0.9835,
+  "best_classifier": "linear_probe"
+}

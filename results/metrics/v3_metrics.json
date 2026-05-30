@@ -1,0 +1,11 @@
+{
+  "model": "V3_ResNet50_TransferLearning",
+  "accuracy": 0.9987,
+  "precision": 0.9988,
+  "recall": 0.9987,
+  "f1": 0.9987,
+  "best_epoch": 19,
+  "training_time_min": 127.81,
+  "trainable_params": 16033318,
+  "total_params": 24576614
+}
