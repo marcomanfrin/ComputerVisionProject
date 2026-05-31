@@ -132,10 +132,10 @@ All versions are evaluated on the same held-out test set (8,795 images) using:
 
 ¹ V4 time refers to embedding extraction over the full dataset; the linear probe itself fits in 1.95 s.
 
-<p align="center"><img src="results/plots/metrics_comparison.png" alt="Per-version accuracy / precision / recall / F1 bar chart" width="70%"></p>
+<p align="center"><img src="results/plots/metrics_comparison.png" alt="Per-version accuracy / precision / recall / F1 bar chart" width="50%"></p>
 *Figure 2 — Side-by-side comparison of weighted metrics across V1–V4.*
 
-<p align="center"><img src="results/plots/tradeoff_time_params.png" alt="Training time vs. trainable parameters trade-off" width="70%"></p>
+<p align="center"><img src="results/plots/tradeoff_time_params.png" alt="Training time vs. trainable parameters trade-off" width="50%"></p>
 *Figure 3 — Training time vs. trainable parameters. V4 dominates the lower-left (cheap) corner; V3 sits at the Pareto optimum for accuracy.*
 
 ### 4.2 Discussion by Research Question
@@ -153,26 +153,26 @@ Key observations from the loss/accuracy curves:
 * **V2:** validation loss tracks training loss closely, no significant overfitting thanks to dropout + augmentation. Best checkpoint at epoch 80 over the full 100-epoch schedule.
 * **V3:** validation accuracy plateaus around 99.7% by epoch 10; the remaining nine epochs deliver marginal gains. Best checkpoint at epoch 19.
 
-<p align="center"><img src="results/plots/v2_training_curves.png" alt="V2 training curves" width="70%"></p>
+<p align="center"><img src="results/plots/v2_training_curves.png" alt="V2 training curves" width="50%"></p>
 *Figure 4 — V2 Custom CNN training and validation loss/accuracy over 90 epochs.*
 
-<p align="center"><img src="results/plots/v3_training_curves.png" alt="V3 training curves" width="70%"></p>
+<p align="center"><img src="results/plots/v3_training_curves.png" alt="V3 training curves" width="50%"></p>
 *Figure 5 — V3 ResNet50 training and validation loss/accuracy over 24 epochs.*
 
 ### 4.4 Confusion Matrices
 
 V1 exhibits widespread cross-class confusion concentrated on visually similar fungal diseases. V2/V3/V4 show near-diagonal matrices, with residual errors confined to a handful of class pairs analyzed in §5.
 
-<p align="center"><img src="results/plots/v1_confusion_matrix.png" alt="V1 confusion matrix" width="70%"></p>
+<p align="center"><img src="results/plots/v1_confusion_matrix.png" alt="V1 confusion matrix" width="40%"></p>
 *Figure 6 — V1 (HOG + SVM) confusion matrix. Off-diagonal mass concentrated on intra-species disease confusions.*
 
-<p align="center"><img src="results/plots/v2_confusion_matrix.png" alt="V2 confusion matrix" width="70%"></p>
+<p align="center"><img src="results/plots/v2_confusion_matrix.png" alt="V2 confusion matrix" width="40%"></p>
 *Figure 7 — V2 (Custom CNN) confusion matrix. Near-diagonal pattern.*
 
-<p align="center"><img src="results/plots/v3_confusion_matrix.png" alt="V3 confusion matrix" width="70%"></p>
+<p align="center"><img src="results/plots/v3_confusion_matrix.png" alt="V3 confusion matrix" width="40%"></p>
 *Figure 8 — V3 (ResNet50 TL) confusion matrix. Best overall, residual errors on biologically close pairs.*
 
-<p align="center"><img src="results/plots/v4_confusion_matrix.png" alt="V4 confusion matrix" width="70%"></p>
+<p align="center"><img src="results/plots/v4_confusion_matrix.png" alt="V4 confusion matrix" width="40%"></p>
 *Figure 9 — V4 (DINOv3 + linear probe) confusion matrix. Comparable to V3 despite a fully frozen backbone.*
 
 ### 4.5 Leak Analysis & Clean Evaluation
@@ -189,7 +189,7 @@ The dataset's offline-augmentation strategy (rotations, flips and colour perturb
 
 So **5,732 of 8,795 test images (65.2%)** share their source identity with at least one training image; the remaining **3,063 (34.8%)** form a *clean* subset whose source IDs are absent from train. Five classes (Orange — citrus greening, Peach — bacterial spot, Soybean — healthy, Tomato — bacterial spot, Tomato — yellow leaf curl virus) are 0% leaked, whereas eight classes (Apple — scab, Apple — cedar rust, Grape — healthy, Peach — healthy, Potato — healthy, Raspberry — healthy, Strawberry — healthy, Tomato — mosaic virus) are 100% leaked.
 
-<p align="center"><img src="results/plots/leak_per_class.png" alt="Per-class leak quantification" width="70%"></p>
+<p align="center"><img src="results/plots/leak_per_class.png" alt="Per-class leak quantification" width="50%"></p>
 *Figure 15 — Percentage of test source IDs whose augmented copies are already present in train, per class.*
 
 **Clean re-evaluation.** Loading the published V2 / V3 / V4 checkpoints and running inference on the four masked subsets (no retraining) yields:
@@ -200,7 +200,7 @@ So **5,732 of 8,795 test images (65.2%)** share their source identity with at le
 | V3 — ResNet50 TL | 99.87% | 99.86% | **99.90%** | 99.80% |
 | V4 — DINOv3 + LinProbe | 98.35% | 98.34% | **98.37%** | 97.83% |
 
-<p align="center"><img src="results/plots/clean_vs_full_test.png" alt="Clean vs. full test accuracy" width="70%"></p>
+<p align="center"><img src="results/plots/clean_vs_full_test.png" alt="Clean vs. full test accuracy" width="60%"></p>
 *Figure 16 — Accuracy on FULL / LEAKED / CLEAN / NON-AUG subsets of the test set. For V3 and V4 the CLEAN accuracy is marginally higher than FULL.*
 
 **Interpretation.** The clean accuracy differs from the full-test accuracy by at most **0.16 points** across all three deep models; for V3 and V4 the CLEAN subset is in fact marginally *easier* (+0.03 and +0.02 respectively). The offline augmentations are precisely the geometric / colour invariances a deep visual backbone learns to discard — observing a 90°-rotated copy of a leaf in train provides no additional discriminative signal beyond what the same leaf at 0° would. The 63% source-level leak is therefore *statistically irrelevant* for the published accuracies on this task; the models have learned a genuine representation rather than memorising augmented duplicates.
@@ -232,7 +232,7 @@ V1's confusion matrix shows three main failure patterns:
 * **Within-species disease confusion.** Multiple Tomato diseases (early blight, late blight, septoria leaf spot) collapse onto each other — all produce roughly circular dark lesions on green tissue, and HOG cannot distinguish lesion morphology at this resolution.
 * **Background dominance.** Some images include substantial background; HOG aggregates gradients globally and is sensitive to non-leaf textures.
 
-<p align="center"><img src="results/plots/v1_f1_per_class.png" alt="V1 per-class F1" width="70%"></p>
+<p align="center"><img src="results/plots/v1_f1_per_class.png" alt="V1 per-class F1" width="50%"></p>
 *Figure 10 — V1 per-class F1. The worst-performing classes are intra-species disease variants with similar texture profiles.*
 
 ### 5.2 V2 / V3 — Residual Errors
@@ -244,20 +244,20 @@ For both deep models, residual errors (~0.1–0.4%) cluster on **biologically cl
 
 Inspecting misclassified samples reveals that the worst-performing classes are systematically those with **subtle visual differences** even for human experts.
 
-<p align="center"><img src="results/plots/v2_f1_per_class.png" alt="V2 per-class F1" width="70%"></p>
+<p align="center"><img src="results/plots/v2_f1_per_class.png" alt="V2 per-class F1" width="50%"></p>
 *Figure 11 — V2 per-class F1, mean ~99.6%, residual gap on a few biologically close classes.*
 
-<p align="center"><img src="results/plots/v3_f1_per_class.png" alt="V3 per-class F1" width="70%"></p>
+<p align="center"><img src="results/plots/v3_f1_per_class.png" alt="V3 per-class F1" width="50%"></p>
 *Figure 12 — V3 per-class F1, the most uniform distribution across all 38 classes.*
 
 ### 5.3 V4 — Failure Modes
 
 V4 errors concentrate on the same biologically ambiguous pairs as V3, plus a small additional gap on classes whose visual features lie far from DINOv3's natural-image pre-training distribution (e.g. highly stylized macro shots). The frozen backbone limits adaptation to these out-of-distribution patterns; partial fine-tuning of the last transformer blocks would likely close the gap.
 
-<p align="center"><img src="results/plots/v4_f1_per_class.png" alt="V4 per-class F1" width="70%"></p>
+<p align="center"><img src="results/plots/v4_f1_per_class.png" alt="V4 per-class F1" width="50%"></p>
 *Figure 13 — V4 per-class F1, mean ~98.3% with no class below 0.85.*
 
-<p align="center"><img src="results/plots/v4_knn_vs_linprobe.png" alt="V4 k-NN vs. Linear Probe" width="70%"></p>
+<p align="center"><img src="results/plots/v4_knn_vs_linprobe.png" alt="V4 k-NN vs. Linear Probe" width="50%"></p>
 *Figure 14 — Comparison of the two probes on top of frozen DINOv3 features: linear probe edges out k-NN by 0.10 points, evidence of an already linearly separable embedding space.*
 
 ### 5.4 Cross-Cutting Observations
@@ -270,40 +270,9 @@ V4 errors concentrate on the same biologically ambiguous pairs as V3, plus a sma
 
 ## 6. Ethical Considerations
 
-### 6.1 Dataset Bias
+### Dataset Bias
 
 PlantVillage was collected under **controlled laboratory conditions**: uniform backgrounds, even lighting, single leaves per image. Models trained exclusively on PlantVillage show known **degradation when deployed on real-field photographs** with cluttered backgrounds, multiple leaves, occlusions, and variable lighting (Mohanty et al., 2016; Ferentinos, 2018). A production system would require domain adaptation or additional in-field training data.
-
-### 6.2 Geographic and Crop Coverage Bias
-
-The 38 classes cover 14 crop species concentrated in **temperate-zone agriculture** (apple, grape, peach, tomato, corn). Tropical crops central to food security in many low-income countries (cassava, yam, plantain, millet) are **absent**. Deploying this exact model in regions where these crops dominate would systematically fail and could mislead farmers — an equity-and-accessibility concern that must be flagged in any documentation.
-
-### 6.3 Risk of Misuse and Over-Reliance
-
-Automated diagnosis produced as a confident class label may discourage farmers from seeking expert consultation in ambiguous cases. Best practice is to:
-
-* Surface **prediction confidence** (softmax max or temperature-scaled probability) and recommend expert review below a threshold.
-* Avoid prescriptive treatment recommendations from a classifier whose output space does not include "unknown".
-
-### 6.4 Privacy
-
-Images of fields, farm equipment, or geo-tagged crops can reveal commercially sensitive information (cultivation density, infection status of a competitor's farm) or, when combined with location metadata, the identity of individual farms. A deployed application should:
-
-* Strip EXIF metadata (GPS, device IDs) before any upload.
-* Process inference **on-device** where possible.
-* Provide clear consent flows before transmitting images to remote servers.
-
-### 6.5 Environmental Footprint
-
-V3 required ~2 hours of GPU training. The marginal accuracy gain over V4 (~1.5 points) comes at a measurable energy cost. V4 — frozen backbone + 2-second linear probe — illustrates a **green-AI alternative** that achieves >98% accuracy at a fraction of the carbon footprint.
-
-### 6.6 Responsible Deployment Checklist
-
-* [ ] Document dataset provenance and known biases to end users.
-* [ ] Include uncertainty estimates in every prediction.
-* [ ] Provide a fallback to expert consultation.
-* [ ] Strip identifying metadata before transmission.
-* [ ] Validate on in-field images before production deployment.
 
 ---
 
@@ -316,64 +285,3 @@ This work compared four progressively more sophisticated approaches to plant dis
 3. **Self-supervised foundation models offer a strikingly favorable accuracy/cost trade-off** — DINOv3 frozen + linear probe reaches 98.35% with zero backbone training, making it the most attractive option for rapid prototyping, new-class onboarding, and edge deployment.
 
 Future work should evaluate the same four pipelines on **in-field imagery** to quantify the domain-shift gap, and explore **partial fine-tuning of DINOv3's last transformer blocks** as a hybrid between the V3 and V4 recipes.
-
----
-
-## References
-
-* Mohanty, S. P., Hughes, D. P., & Salathé, M. (2016). *Using deep learning for image-based plant disease detection.* Frontiers in Plant Science, 7.
-* Ferentinos, K. P. (2018). *Deep learning models for plant disease detection and diagnosis.* Computers and Electronics in Agriculture, 145.
-* He, K., Zhang, X., Ren, S., & Sun, J. (2016). *Deep residual learning for image recognition.* CVPR.
-* Dalal, N., & Triggs, B. (2005). *Histograms of oriented gradients for human detection.* CVPR.
-* Oquab, M., et al. (2024). *DINOv2: Learning robust visual features without supervision.* TMLR. (Methodological reference for the DINOv3 family.)
-* FAO (2021). *The impact of disasters and crises on agriculture and food security.* Food and Agriculture Organization of the United Nations.
-
----
-
-## Appendix A — Validation on the Non-Augmented PlantVillage Dataset (`og-dataset` branch)
-
-> **Status:** partial re-run. V1 and V4 are complete; V2 and V3 are still being re-executed and are reported as *pending* below. Numbers will be finalized once the full pipeline has run.
-
-### A.1 Motivation
-
-§2.1 and §4.5 flag the central caveat of this study: the **New Plant Diseases Dataset** (`vipoooool/new-plant-diseases-dataset`) is *offline-augmented*, so geometric/colour variants of the same physical leaf land on both sides of the train/test boundary (63.3% source-level leak). §4.5 argues — via a post-hoc clean re-evaluation — that this leak is statistically irrelevant. The `og-dataset` branch turns that *argument* into a *direct experiment*: it re-runs the entire pipeline on **`mohitsingh1804/plantvillage`**, a non-augmented PlantVillage variant in which source-level leakage is **impossible by construction** (each physical leaf appears exactly once, before splitting).
-
-### A.2 Dataset comparison
-
-| | `main` (`vipoooool`) | `og-dataset` (`mohitsingh1804`) |
-| --- | :--: | :--: |
-| Offline augmentation | yes (baked into filenames) | none |
-| Total images | 87,867 | 54,304 |
-| Train / Val / Test | 70,295 / 8,777 / 8,795 | 43,443 / 5,422 / 5,439 |
-| Classes | 38 | 38 |
-| Source-level train↔test leak | 63.3% | 0% (by construction) |
-
-The split protocol is unchanged: the dataset's `valid/` folder is split 50/50 into validation and test (`random_state=42`).
-
-### A.3 Methodological refinements
-
-Because the non-augmented dataset has a genuinely imbalanced (long-tail) class distribution — no longer flattened by per-class augmentation — the `og-dataset` evaluation adds:
-
-* **Macro-averaged** precision/recall/F1 alongside the weighted aggregates, to expose minority-class behaviour.
-* `class_weight='balanced'` on the V4 linear probe and `weights='distance'` on the V4 k-NN (k=20), to compensate for class imbalance.
-
-### A.4 Results (clean dataset)
-
-| Version | Metric | `main` (augmented) | `og-dataset` (clean) | Δ |
-| --- | --- | :--: | :--: | :--: |
-| V1 — HOG + SVM | Accuracy | 74.39% | 74.74% | +0.35 |
-| | F1 (weighted) | 74.26% | 74.90% | +0.64 |
-| | F1 (macro) | — | 70.32% | — |
-| | Inference | 81 ms/img | 39 ms/img | — |
-| V4 — DINOv3 linear probe | Accuracy | 98.35% | 98.16% | −0.19 |
-| | F1 (weighted) | 98.35% | 98.18% | −0.17 |
-| | F1 (macro) | — | 97.95% | — |
-| V4 — DINOv3 k-NN | Accuracy | 98.25% | 97.90% | −0.35 |
-| V2 — Custom CNN | Accuracy | 99.66% | *pending re-run* | — |
-| V3 — ResNet50 TL | Accuracy | 99.87% | *pending re-run* | — |
-
-### A.5 Interpretation
-
-On a dataset where source-level leakage cannot occur, the two completed models reproduce their full-dataset numbers within **±0.35 points**. V1 is in fact marginally *higher* (+0.35 acc) despite training on **~38% fewer images** (43,443 vs 70,295), and V4 drops by a negligible 0.19 points. This is a direct, independent confirmation of §4.5: the 63% augmentation leak on `main` was statistically irrelevant, and the models had learned genuine discriminative representations rather than memorising augmented duplicates. The healthy macro-F1 of V4 (97.95%) further shows the result holds under real class imbalance, not only under the augmentation-balanced regime of the original dataset.
-
-The pending V2/V3 re-runs are expected to confirm the same pattern; this appendix will be updated once they complete.

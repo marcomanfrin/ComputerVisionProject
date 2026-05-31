@@ -15,7 +15,7 @@ Plant diseases cause an estimated 20–40% of global crop loss every year. This 
 | **V3** | ResNet50 fine-tuning | Supervised transfer learning |
 | **V4** | DINOv3 ViT-B/16 + linear probe | Self-supervised foundation models |
 
-**Dataset:** New Plant Diseases Dataset (Kaggle) — an offline-augmented derivative of PlantVillage, 87,867 RGB leaf images, 38 classes (14 crops × healthy + disease variants). The dataset's `train/` folder (70,295 images) is used as-is; its `valid/` folder (17,572 images) is split 50/50 into validation (8,777) and test (8,795) with seed = 42 (effective split ≈ 80 / 10 / 10).
+**Dataset:** New Plant Diseases Dataset (Kaggle) — a derivative of PlantVillage, 87,867 RGB leaf images, 38 classes (14 crops × healthy + disease variants). The dataset's `train/` folder (70,295 images) is used as-is; its `valid/` folder (17,572 images) is split 50/50 into validation (8,777) and test (8,795) with seed = 42 (effective split ≈ 80 / 10 / 10).
 
 ---
 
@@ -118,7 +118,6 @@ jupyter notebook notebooks/
 | 5 | `04_v4_dinov3_probe` | cached embeddings + `v4_metrics.json` |
 | 6 | `05_comparison_and_analysis` | `comparison_table.csv`, `summary_table.csv`, comparison plots |
 | 7 | `06_prepare_documentation` | regenerates `RESULTS_SUMMARY.md` and `export_for_report.json` |
-| 8 | `07_leak_analysis_and_clean_eval` | `leak_quantification.json`, `leak_per_class.csv`, `clean_test_metrics.json`, `leak_per_class.png`, `clean_vs_full_test.png` |
 
 Notebooks `02`, `03`, `04` benefit from a CUDA-enabled GPU but fall back to CPU.
 
@@ -183,23 +182,6 @@ The Kaggle dataset is offline-augmented: each source leaf is duplicated under ro
 3. Experimental results — tables, training curves, confusion matrices
 4. Failure analysis — per-version failure modes and biologically plausible errors
 5. Ethical considerations — dataset bias, geographic coverage, privacy, environmental footprint
-
----
-
-## Appendix — Clean-dataset validation (`og-dataset` branch)
-
-> **Status:** partial re-run (V1 + V4 complete; V2/V3 pending).
-
-The `og-dataset` branch re-runs the full pipeline on a **non-augmented** PlantVillage variant (`mohitsingh1804/plantvillage`, 54,304 images: 43,443 / 5,422 / 5,439) instead of the offline-augmented `vipoooool/new-plant-diseases-dataset`. On this dataset, source-level train/test leakage is **impossible by construction** (0%, vs 63.3% on `main`), turning the §4.5 *clean re-evaluation argument* into a *direct experiment*.
-
-| Version | `main` (augmented) | `og-dataset` (clean) | Δ acc |
-|---|:--:|:--:|:--:|
-| V1 — HOG + SVM | 74.39% | 74.74% | +0.35 |
-| V4 — DINOv3 + LinProbe | 98.35% | 98.16% | −0.19 |
-| V2 — Custom CNN | 99.66% | *pending* | — |
-| V3 — ResNet50 TL | 99.87% | *pending* | — |
-
-The completed models reproduce within ±0.35 pts — V1 even higher despite ~38% fewer training images — independently confirming that the augmentation leak was statistically irrelevant. Full discussion: [`Technical_Analysis.md`](Technical_Analysis.md) §Appendix A.
 
 ---
 
