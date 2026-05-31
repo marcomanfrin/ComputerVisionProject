@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Technical_Analysis.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> or <div class="page"></div> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+
+<!-- Custom styling — inspired by marcomanfrin.me (Poppins + teal #1ea0aa) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+	--accent: rgb(30, 160, 170);
+	--accent-hover: rgb(24, 138, 147);
+	--accent-soft: rgba(30, 160, 170, 0.10);
+	--accent-line: rgba(30, 160, 170, 0.30);
+	--ink: rgb(68, 68, 68);
+	--muted: #8a8f94;
+	--rule: #ececec;
+	--card: #ffffff;
+	--bg: #fafbfc;
+	--shadow-soft: rgba(0, 0, 0, 0.08);
+}
+
+body {
+	font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+	font-size: 15.5px;
+	font-weight: 400;
+	line-height: 1.75;
+	color: var(--ink);
+	background:
+		radial-gradient(1000px 520px at 100% -8%, var(--accent-soft) 0%, transparent 55%),
+		var(--bg);
+	max-width: 880px;
+	margin: 0 auto;
+	padding: 56px 36px 120px;
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+}
+
+/* Custom scrollbar — matching the portfolio */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 25px; }
+::-webkit-scrollbar-thumb { background: #ccc; border-radius: 30px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+h1, h2, h3, h4 {
+	font-family: "Poppins", sans-serif;
+	color: var(--ink);
+	letter-spacing: -0.01em;
+	line-height: 1.3;
+}
+
+h1 {
+	font-size: 2.1em;
+	font-weight: 700;
+	margin: 0.2em 0 0.6em;
+	padding-bottom: 0.4em;
+	border-bottom: 3px solid var(--accent);
+}
+
+h2 {
+	font-size: 1.45em;
+	font-weight: 600;
+	margin-top: 2.4em;
+	padding-bottom: 0.25em;
+	border-bottom: 1px solid var(--rule);
+}
+
+h2::before {
+	content: "";
+	display: inline-block;
+	width: 0.45em;
+	height: 0.45em;
+	margin-right: 0.55em;
+	border-radius: 50%;
+	background: var(--accent);
+	vertical-align: middle;
+}
+
+h3 {
+	font-size: 1.16em;
+	font-weight: 600;
+	margin-top: 1.8em;
+	color: var(--accent);
+}
+
+p { margin: 0.9em 0; }
+
+a {
+	color: var(--accent);
+	font-weight: 500;
+	border-bottom: 1px solid var(--accent-line);
+	transition: color 0.15s ease, border-color 0.15s ease;
+}
+a:hover {
+	text-decoration: none;
+	color: var(--accent-hover);
+	border-bottom-color: var(--accent);
+}
+
+strong { font-weight: 600; color: #2c2c2c; }
+
+hr {
+	border: 0;
+	height: 1px;
+	background: linear-gradient(to right, transparent, var(--rule) 20%, var(--rule) 80%, transparent);
+	margin: 2.6em 0;
+}
+
+/* Tables — separated rows + teal header, like marcomanfrin.me */
+table {
+	border-collapse: separate;
+	border-spacing: 0;
+	width: 100%;
+	margin: 1.6em 0;
+	font-size: 0.9em;
+	background: var(--card);
+	border-radius: 14px;
+	overflow: hidden;
+	box-shadow: 0 4px 18px var(--shadow-soft);
+}
+
+table > thead > tr > th {
+	background: var(--accent);
+	color: #fff;
+	font-weight: 600;
+	border: none;
+	padding: 12px 16px;
+}
+
+table > tbody > tr > td,
+table > tbody > tr > th {
+	padding: 11px 16px;
+	border: none;
+}
+
+table > tbody > tr:nth-child(even) { background: rgba(30, 160, 170, 0.045); }
+table > tbody > tr:hover { background: var(--accent-soft); }
+table > tbody > tr + tr > td { border-top: 1px solid var(--rule); }
+
+/* Code */
+code {
+	font-family: "JetBrains Mono", Menlo, Monaco, Consolas, monospace;
+	font-size: 0.84em;
+}
+:not(pre) > code {
+	background: var(--accent-soft);
+	color: var(--accent-hover);
+	padding: 0.14em 0.5em;
+	border-radius: 5px;
+	font-weight: 500;
+}
+pre {
+	background: #fbfcfc;
+	border: 1px solid var(--rule);
+	border-radius: 12px;
+	padding: 18px 20px;
+	box-shadow: 0 2px 10px var(--shadow-soft);
+}
+pre code { background: none; color: var(--ink); padding: 0; font-weight: 400; }
+
+/* Blockquotes / callouts */
+blockquote {
+	margin: 1.4em 0;
+	padding: 0.7em 1.3em;
+	background: var(--accent-soft);
+	border-left: 4px solid var(--accent);
+	border-radius: 0 12px 12px 0;
+	color: var(--ink);
+}
+blockquote p { margin: 0.4em 0; }
+
+/* Lists */
+ul, ol { padding-left: 1.5em; }
+li { margin: 0.35em 0; }
+li::marker { color: var(--accent); }
+
+/* Figures: images + the markdown caption paragraph that follows */
+img {
+	display: block;
+	margin: 1.5em auto 0.4em;
+	border-radius: 16px;
+	box-shadow: 0 6px 22px rgba(0, 0, 0, 0.12);
+}
+p[align="center"] { margin-bottom: 0.2em; }
+p[align="center"] + p em,
+p > em:only-child {
+	display: block;
+	text-align: center;
+	font-size: 0.86em;
+	font-weight: 500;
+	color: var(--muted);
+}
+
+/* Author block (first paragraph after H1) */
+h1 + p {
+	font-size: 0.95em;
+	color: var(--muted);
+	line-height: 1.95;
+}
+
+/* Checklists */
+input[type="checkbox"] { margin-right: 0.5em; accent-color: var(--accent); }
+
+@media (max-width: 600px) {
+	body { padding: 28px 18px 80px; font-size: 15px; }
+	h1 { font-size: 1.7em; }
+}
+</style>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="plant-disease-detection-a-comparative-study-of-shallow-learning-custom-cnn-transfer-learning-and-self-supervised-foundation-models">Plant Disease Detection: A Comparative Study of Shallow Learning, Custom CNN, Transfer Learning and Self-Supervised Foundation Models</h1>
+<p><strong>Author:</strong> Marco Manfrin
+<strong>Course:</strong> Computer Vision
+<strong>Date:</strong> May 2026
+<strong>Repository:</strong> <a href="https://github.com/marcomanfrin/ComputerVisionProject">github.com/marcomanfrin/ComputerVisionProject</a></p>
+<hr>
+<h2 id="abstract">Abstract</h2>
+<p>This work presents a comparative analysis of four progressively more sophisticated approaches to plant disease classification on the <strong>New Plant Diseases Dataset</strong> — an offline-augmented version of PlantVillage (87,867 images, 38 classes). We benchmark (i) a classical handcrafted pipeline (HOG + SVM), (ii) a custom CNN trained from scratch, (iii) a fine-tuned ResNet50 (supervised transfer learning), and (iv) a frozen DINOv3 ViT-B/16 backbone with a linear probe (self-supervised foundation model). Results show that all deep approaches surpass 98% accuracy on the held-out test set, with the supervised fine-tuned ResNet50 reaching <strong>99.87%</strong>, while the frozen DINOv3 backbone with a linear probe achieves <strong>98.35%</strong> with <strong>zero trainable backbone parameters</strong>, validating the practical value of modern foundation models for efficient domain adaptation.</p>
+<hr>
+<h2 id="1-problem-statement">1. Problem Statement</h2>
+<h3 id="11-motivation">1.1 Motivation</h3>
+<p>Plant diseases are a major cause of crop loss worldwide, with estimates from the FAO indicating that 20–40% of global crop yield is lost to pests and pathogens every year. Early detection is the single most effective mitigation strategy, but traditional in-field diagnosis requires expert agronomists whose availability is scarce, especially in developing regions where smallholder farms dominate. An automated, image-based classification system deployable on commodity smartphones can democratize access to expert-level diagnosis and enable timely interventions.</p>
+<h3 id="12-computer-vision-framing">1.2 Computer Vision Framing</h3>
+<p>The problem maps to a <strong>fine-grained multi-class classification</strong> task. Compared to standard object recognition, plant disease detection has three distinctive challenges:</p>
+<ol>
+<li><strong>Visual similarity across classes:</strong> different diseases on the same plant species often share macroscopic symptoms (chlorosis, necrosis, lesions).</li>
+<li><strong>High intra-class variability:</strong> symptom severity, leaf age, and lighting introduce strong intra-class noise.</li>
+<li><strong>Long-tail class distribution:</strong> some diseases are heavily over-represented in public datasets, while rare ones are under-sampled.</li>
+</ol>
+<h3 id="13-research-questions">1.3 Research Questions</h3>
+<p>The project is designed to address three concrete questions that mirror the course modules:</p>
+<ul>
+<li><strong>RQ1 — Feature representation:</strong> how much accuracy is left on the table when relying on handcrafted features (HOG) instead of learned representations?</li>
+<li><strong>RQ2 — Architecture vs. pre-training:</strong> for a relatively constrained dataset, what matters more — a carefully designed custom CNN or transfer from ImageNet-pretrained backbones?</li>
+<li><strong>RQ3 — Self-supervised foundation models:</strong> can a frozen vision foundation model (DINOv3) match supervised fine-tuning while requiring zero trainable backbone parameters?</li>
+</ul>
+<hr>
+<h2 id="2-methodology">2. Methodology</h2>
+<p>We implement four versions (V1–V4) covering the spectrum from classical computer vision to modern self-supervised learning. All versions share the same data splits and evaluation protocol to ensure a fair comparison.</p>
+<h3 id="21-dataset-and-preprocessing">2.1 Dataset and Preprocessing</h3>
+<ul>
+<li><strong>Dataset:</strong> New Plant Diseases Dataset (Kaggle, <em>vipoooool</em>) — an offline-augmented derivative of PlantVillage (Mohanty et al., 2016). 87,867 RGB images, 38 classes (14 crops × healthy + disease variants).</li>
+<li><strong>Split:</strong> the dataset ships with a fixed <code>train/</code> folder (70,295 images) and a <code>valid/</code> folder (17,572 images); we split the latter 50/50 (<code>random_state=42</code>) into validation (8,777) and test (8,795). Effective split ≈ 80% / 10% / 10%.</li>
+<li><strong>Note on augmentation:</strong> because augmentation is baked into the dataset offline, augmented variants of the same source leaf may fall on both sides of the train/validation boundary. This likely inflates the absolute accuracies reported below and should be read as a caveat on the &gt;99% figures.</li>
+<li><strong>Image size:</strong> images are 256×256, resized depending on the model (64×128 for V1 HOG, 224×224 for V2/V3, 224×224 with ImageNet normalization for V4).</li>
+<li><strong>Augmentations (V2/V3, training only):</strong> RandomRotation(±15°), RandomHorizontalFlip(p=0.5), ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2), RandomAffine(translate=0.1).</li>
+</ul>
+<p align="center"><img src="results/plots/00_data_exploration.png" alt="Dataset exploration: per-class image counts and sample leaves" width="70%"></p>
+*Figure 1 — Class distribution and representative samples from the New Plant Diseases Dataset.*
+<h3 id="22-v1--hog--svm-shallow-learning">2.2 V1 — HOG + SVM (Shallow Learning)</h3>
+<p>A handcrafted feature pipeline serves as the classical baseline.</p>
+<ul>
+<li><strong>Feature extractor:</strong> Histogram of Oriented Gradients with <code>winSize=(64,128)</code>, <code>blockSize=(16,16)</code>, <code>blockStride=(8,8)</code>, <code>cellSize=(8,8)</code>, <code>nbins=9</code>. Images are first converted to grayscale to discard color information and isolate the contribution of texture/edges.</li>
+<li><strong>Classifier:</strong> Support Vector Machine with RBF kernel (<code>C=1.0</code>, <code>gamma='scale'</code>).</li>
+<li><strong>Rationale:</strong> HOG was historically state of the art for pedestrian detection and remains a reasonable baseline for fine-grained texture tasks. It is fully interpretable and requires no GPU, but it discards color — a strong inductive bias for plant pathology where chlorotic/necrotic colors are diagnostic.</li>
+</ul>
+<h3 id="23-v2--custom-cnn-from-scratch-deep-learning">2.3 V2 — Custom CNN from Scratch (Deep Learning)</h3>
+<p>A purpose-built convolutional architecture trained end-to-end from scratch.</p>
+<ul>
+<li><strong>Architecture (~660k trainable parameters):</strong>
+<ul>
+<li><code>Conv(3→32, 3×3) + BN + ReLU + MaxPool(2×2)</code></li>
+<li><code>Conv(32→64, 3×3) + BN + ReLU + MaxPool(2×2)</code></li>
+<li><code>Conv(64→128, 3×3) + BN + ReLU + MaxPool(2×2)</code></li>
+<li><code>Conv(128→256, 3×3) + BN + ReLU + GlobalAvgPool</code></li>
+<li><code>Dense(256→512) + ReLU + Dropout(0.5)</code></li>
+<li><code>Dense(512→256) + ReLU + Dropout(0.3)</code></li>
+<li><code>Dense(256→38) + Softmax</code></li>
+</ul>
+</li>
+<li><strong>Training:</strong> CrossEntropyLoss, Adam (lr=1e-3), ReduceLROnPlateau (patience=5, factor=0.1), early stopping on validation loss (patience=10). Best checkpoint at epoch 80; training stopped at epoch 90.</li>
+<li><strong>Rationale:</strong> validates the hypothesis that a modest CNN, given sufficient data, can learn discriminative features end-to-end without manual feature engineering.</li>
+</ul>
+<h3 id="24-v3--resnet50-transfer-learning-supervised-fine-tuning">2.4 V3 — ResNet50 Transfer Learning (Supervised Fine-tuning)</h3>
+<p>We leverage ImageNet pre-training and fine-tune the high-level layers.</p>
+<ul>
+<li><strong>Backbone:</strong> <code>torchvision.models.resnet50(pretrained=True)</code>.</li>
+<li><strong>Strategy:</strong> <code>layer1</code>, <code>layer2</code>, <code>layer3</code> frozen; <code>layer4</code> unfrozen; original 1000-way head replaced with <code>Linear(2048→512) + ReLU + Dropout(0.5) + Linear(512→38)</code>.</li>
+<li><strong>Optimizer:</strong> Adam, <strong>differential learning rates</strong> — <code>1e-4</code> for the unfrozen <code>layer4</code> (gentle fine-tuning) and <code>1e-3</code> for the custom head.</li>
+<li><strong>Total parameters:</strong> ~24.6M (16.0M trainable, 8.6M frozen).</li>
+<li><strong>Rationale:</strong> evaluates the standard industry recipe for limited-data settings.</li>
+</ul>
+<h3 id="25-v4--dinov3--linear-probe-self-supervised-foundation-model">2.5 V4 — DINOv3 + Linear Probe (Self-Supervised Foundation Model)</h3>
+<p>The most modern approach: a foundation model pre-trained without labels.</p>
+<ul>
+<li><strong>Backbone:</strong> <code>facebook/dinov3-vitb16-pretrain-lvd1689m</code> — a Vision Transformer (ViT-B/16, 86M parameters) pre-trained via DINOv3 self-distillation on the LVD-1689M dataset (1.69 billion unlabeled web images).</li>
+<li><strong>Pipeline:</strong> the backbone is <strong>entirely frozen</strong>. Each image is embedded into a 768-dimensional vector (CLS token). Two lightweight classifiers are trained on top:
+<ul>
+<li><strong>k-NN</strong> (k=20, cosine distance) — purely instance-based.</li>
+<li><strong>Linear probe</strong> (logistic regression, <code>C=1.0</code>, <code>max_iter=1000</code>).</li>
+</ul>
+</li>
+<li><strong>Trainable parameters in the backbone:</strong> <strong>zero</strong>.</li>
+<li><strong>Rationale:</strong> tests whether a generic self-supervised representation transfers to a domain (plant leaves) far from the pre-training distribution, with negligible compute.</li>
+</ul>
+<h3 id="26-evaluation-protocol">2.6 Evaluation Protocol</h3>
+<p>All versions are evaluated on the same held-out test set (8,795 images) using:</p>
+<ul>
+<li><strong>Accuracy</strong> — overall correctness.</li>
+<li><strong>Precision (weighted)</strong>, <strong>Recall (weighted)</strong>, <strong>F1-score (weighted)</strong> — class-imbalance-aware aggregates.</li>
+<li><strong>Confusion matrix</strong> — 38×38 matrix per version.</li>
+<li><strong>Per-class F1</strong> — to surface failure modes.</li>
+</ul>
+<hr>
+<h2 id="3-experimental-setup">3. Experimental Setup</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dataset</td>
+<td>New Plant Diseases Dataset (augmented PlantVillage), 87,867 images, 38 classes</td>
+</tr>
+<tr>
+<td>Split</td>
+<td>train 70,295 / val 8,777 / test 8,795 (≈ 80 / 10 / 10), seed = 42</td>
+</tr>
+<tr>
+<td>Hardware</td>
+<td>Apple Silicon (MPS backend), macOS 25.5</td>
+</tr>
+<tr>
+<td>Frameworks</td>
+<td>PyTorch 2.1, torchvision, scikit-learn 1.3, OpenCV 4.8, HuggingFace Transformers</td>
+</tr>
+<tr>
+<td>Reproducibility</td>
+<td>All seeds fixed (NumPy, PyTorch, sklearn); deterministic val/test split</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="4-experimental-results">4. Experimental Results</h2>
+<h3 id="41-overall-comparison">4.1 Overall Comparison</h3>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Approach</th>
+<th style="text-align:center">Accuracy</th>
+<th style="text-align:center">Precision</th>
+<th style="text-align:center">Recall</th>
+<th style="text-align:center">F1</th>
+<th style="text-align:center">Train time</th>
+<th style="text-align:center">Trainable params</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>V1 — HOG + SVM</td>
+<td>Shallow Learning</td>
+<td style="text-align:center">74.39%</td>
+<td style="text-align:center">74.62%</td>
+<td style="text-align:center">74.39%</td>
+<td style="text-align:center">74.26%</td>
+<td style="text-align:center">25 min</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>V2 — Custom CNN</td>
+<td>Deep Learning from scratch</td>
+<td style="text-align:center">99.66%</td>
+<td style="text-align:center">99.66%</td>
+<td style="text-align:center">99.66%</td>
+<td style="text-align:center">99.66%</td>
+<td style="text-align:center">294 min</td>
+<td style="text-align:center">660 k</td>
+</tr>
+<tr>
+<td>V3 — ResNet50 TL</td>
+<td>Supervised fine-tuning</td>
+<td style="text-align:center"><strong>99.87%</strong></td>
+<td style="text-align:center"><strong>99.88%</strong></td>
+<td style="text-align:center"><strong>99.87%</strong></td>
+<td style="text-align:center"><strong>99.87%</strong></td>
+<td style="text-align:center">128 min</td>
+<td style="text-align:center">16.0 M</td>
+</tr>
+<tr>
+<td>V4 — DINOv3 + LinProbe</td>
+<td>SSL frozen backbone</td>
+<td style="text-align:center">98.35%</td>
+<td style="text-align:center">98.39%</td>
+<td style="text-align:center">98.35%</td>
+<td style="text-align:center">98.35%</td>
+<td style="text-align:center">12.5 min¹</td>
+<td style="text-align:center">0 (backbone)</td>
+</tr>
+</tbody>
+</table>
+<p>¹ V4 time refers to embedding extraction over the full dataset; the linear probe itself fits in 1.95 s.</p>
+<p align="center"><img src="results/plots/metrics_comparison.png" alt="Per-version accuracy / precision / recall / F1 bar chart" width="70%"></p>
+*Figure 2 — Side-by-side comparison of weighted metrics across V1–V4.*
+<p align="center"><img src="results/plots/tradeoff_time_params.png" alt="Training time vs. trainable parameters trade-off" width="70%"></p>
+*Figure 3 — Training time vs. trainable parameters. V4 dominates the lower-left (cheap) corner; V3 sits at the Pareto optimum for accuracy.*
+<h3 id="42-discussion-by-research-question">4.2 Discussion by Research Question</h3>
+<p><strong>RQ1 — Handcrafted vs. learned features.</strong> The gap between V1 (74.4%) and the deep models (&gt;98%) is <strong>&gt;24 percentage points</strong>. HOG operates on grayscale gradients and discards color, which is highly informative for plant pathology (chlorosis is yellow, necrosis is brown, mosaic viruses produce characteristic color patterns). The SVM cannot recover information the descriptor never encoded.</p>
+<p><strong>RQ2 — Architecture vs. pre-training.</strong> V3 (ResNet50 TL) outperforms V2 (Custom CNN) by 0.21 points (99.87 vs. 99.66), but with <strong>24× more trainable parameters</strong>. Crucially, V3 converges in 19 epochs versus V2's 80, and its total training time (128 min) is roughly <strong>2.3× shorter</strong> than V2's (294 min) despite the much larger backbone — confirming that ImageNet pre-training dramatically reduces the optimization burden. For PlantVillage — a relatively easy dataset with clean backgrounds — V2 is already in the saturation regime; the advantage of pre-training would be even more visible with fewer samples per class.</p>
+<p><strong>RQ3 — Self-supervised foundation model.</strong> V4 reaches 98.35% with the backbone <strong>fully frozen</strong>, training only a logistic regression in under 2 seconds. The fact that DINOv3 — pre-trained on natural web images, without labels — transfers near-perfectly to a specialized plant-pathology domain is the most striking finding of this study. The k-NN classifier (98.25%) almost matches the linear probe (98.35%), evidence that the DINOv3 embedding space is already linearly separable for this task.</p>
+<h3 id="43-training-dynamics">4.3 Training Dynamics</h3>
+<p>Key observations from the loss/accuracy curves:</p>
+<ul>
+<li><strong>V2:</strong> validation loss tracks training loss closely, no significant overfitting thanks to dropout + augmentation. Best checkpoint at epoch 80 over the full 100-epoch schedule.</li>
+<li><strong>V3:</strong> validation accuracy plateaus around 99.7% by epoch 10; the remaining nine epochs deliver marginal gains. Best checkpoint at epoch 19.</li>
+</ul>
+<p align="center"><img src="results/plots/v2_training_curves.png" alt="V2 training curves" width="70%"></p>
+*Figure 4 — V2 Custom CNN training and validation loss/accuracy over 90 epochs.*
+<p align="center"><img src="results/plots/v3_training_curves.png" alt="V3 training curves" width="70%"></p>
+*Figure 5 — V3 ResNet50 training and validation loss/accuracy over 24 epochs.*
+<h3 id="44-confusion-matrices">4.4 Confusion Matrices</h3>
+<p>V1 exhibits widespread cross-class confusion concentrated on visually similar fungal diseases. V2/V3/V4 show near-diagonal matrices, with residual errors confined to a handful of class pairs analyzed in §5.</p>
+<p align="center"><img src="results/plots/v1_confusion_matrix.png" alt="V1 confusion matrix" width="70%"></p>
+*Figure 6 — V1 (HOG + SVM) confusion matrix. Off-diagonal mass concentrated on intra-species disease confusions.*
+<p align="center"><img src="results/plots/v2_confusion_matrix.png" alt="V2 confusion matrix" width="70%"></p>
+*Figure 7 — V2 (Custom CNN) confusion matrix. Near-diagonal pattern.*
+<p align="center"><img src="results/plots/v3_confusion_matrix.png" alt="V3 confusion matrix" width="70%"></p>
+*Figure 8 — V3 (ResNet50 TL) confusion matrix. Best overall, residual errors on biologically close pairs.*
+<p align="center"><img src="results/plots/v4_confusion_matrix.png" alt="V4 confusion matrix" width="70%"></p>
+*Figure 9 — V4 (DINOv3 + linear probe) confusion matrix. Comparable to V3 despite a fully frozen backbone.*
+<h3 id="45-leak-analysis--clean-evaluation">4.5 Leak Analysis &amp; Clean Evaluation</h3>
+<p>The dataset's offline-augmentation strategy (rotations, flips and colour perturbations baked into the filenames as suffixes such as <code>_90deg</code>, <code>_flipLR</code>, <code>_new30degFlipLR</code>) means that augmented variants of the same source leaf can land on both sides of the train/test boundary. We quantified this <em>post-hoc</em> and re-evaluated the trained models on a leak-free subset, without retraining.</p>
+<p><strong>Quantification.</strong> Stripping the 15 distinct augmentation suffixes from every filename yields a <em>source identifier</em> — the identity of the underlying physical leaf. Cross-referencing source IDs across splits:</p>
+<table>
+<thead>
+<tr>
+<th>Pair</th>
+<th style="text-align:center">Shared source IDs</th>
+<th style="text-align:center">% of B in A</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>train ↔ val</td>
+<td style="text-align:center">5,041</td>
+<td style="text-align:center">63.4%</td>
+</tr>
+<tr>
+<td>train ↔ test</td>
+<td style="text-align:center">5,050</td>
+<td style="text-align:center"><strong>63.3%</strong></td>
+</tr>
+<tr>
+<td>val ↔ test</td>
+<td style="text-align:center">1,225</td>
+<td style="text-align:center">15.4%</td>
+</tr>
+</tbody>
+</table>
+<p>So <strong>5,732 of 8,795 test images (65.2%)</strong> share their source identity with at least one training image; the remaining <strong>3,063 (34.8%)</strong> form a <em>clean</em> subset whose source IDs are absent from train. Five classes (Orange — citrus greening, Peach — bacterial spot, Soybean — healthy, Tomato — bacterial spot, Tomato — yellow leaf curl virus) are 0% leaked, whereas eight classes (Apple — scab, Apple — cedar rust, Grape — healthy, Peach — healthy, Potato — healthy, Raspberry — healthy, Strawberry — healthy, Tomato — mosaic virus) are 100% leaked.</p>
+<p align="center"><img src="results/plots/leak_per_class.png" alt="Per-class leak quantification" width="70%"></p>
+*Figure 15 — Percentage of test source IDs whose augmented copies are already present in train, per class.*
+<p><strong>Clean re-evaluation.</strong> Loading the published V2 / V3 / V4 checkpoints and running inference on the four masked subsets (no retraining) yields:</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th style="text-align:center">FULL (8,795)</th>
+<th style="text-align:center">LEAKED (5,732)</th>
+<th style="text-align:center"><strong>CLEAN (3,063)</strong></th>
+<th style="text-align:center">NON-AUG (4,598)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>V2 — Custom CNN</td>
+<td style="text-align:center">99.66%</td>
+<td style="text-align:center">99.70%</td>
+<td style="text-align:center"><strong>99.58%</strong></td>
+<td style="text-align:center">99.52%</td>
+</tr>
+<tr>
+<td>V3 — ResNet50 TL</td>
+<td style="text-align:center">99.87%</td>
+<td style="text-align:center">99.86%</td>
+<td style="text-align:center"><strong>99.90%</strong></td>
+<td style="text-align:center">99.80%</td>
+</tr>
+<tr>
+<td>V4 — DINOv3 + LinProbe</td>
+<td style="text-align:center">98.35%</td>
+<td style="text-align:center">98.34%</td>
+<td style="text-align:center"><strong>98.37%</strong></td>
+<td style="text-align:center">97.83%</td>
+</tr>
+</tbody>
+</table>
+<p align="center"><img src="results/plots/clean_vs_full_test.png" alt="Clean vs. full test accuracy" width="70%"></p>
+*Figure 16 — Accuracy on FULL / LEAKED / CLEAN / NON-AUG subsets of the test set. For V3 and V4 the CLEAN accuracy is marginally higher than FULL.*
+<p><strong>Interpretation.</strong> The clean accuracy differs from the full-test accuracy by at most <strong>0.16 points</strong> across all three deep models; for V3 and V4 the CLEAN subset is in fact marginally <em>easier</em> (+0.03 and +0.02 respectively). The offline augmentations are precisely the geometric / colour invariances a deep visual backbone learns to discard — observing a 90°-rotated copy of a leaf in train provides no additional discriminative signal beyond what the same leaf at 0° would. The 63% source-level leak is therefore <em>statistically irrelevant</em> for the published accuracies on this task; the models have learned a genuine representation rather than memorising augmented duplicates.</p>
+<p>This analysis is implemented end-to-end in <code>notebooks/07_leak_analysis_and_clean_eval.ipynb</code> and the numbers are stored in <code>results/metrics/leak_quantification.json</code> and <code>results/metrics/clean_test_metrics.json</code>.</p>
+<h3 id="46-accuracy--cost-trade-off">4.6 Accuracy / Cost Trade-off</h3>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th style="text-align:center">Accuracy</th>
+<th style="text-align:center">Train cost</th>
+<th style="text-align:center">Inference cost</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>V1</td>
+<td style="text-align:center">74.4%</td>
+<td style="text-align:center">low (CPU)</td>
+<td style="text-align:center">81 ms/img (CPU)</td>
+<td>interpretable, no GPU</td>
+</tr>
+<tr>
+<td>V2</td>
+<td style="text-align:center">99.7%</td>
+<td style="text-align:center">very high (294 min GPU)</td>
+<td style="text-align:center">~70 ms/img (GPU)</td>
+<td>full architectural control</td>
+</tr>
+<tr>
+<td>V3</td>
+<td style="text-align:center">99.9%</td>
+<td style="text-align:center">high (128 min GPU)</td>
+<td style="text-align:center">~90 ms/img (GPU)</td>
+<td>best absolute score</td>
+</tr>
+<tr>
+<td>V4</td>
+<td style="text-align:center">98.4%</td>
+<td style="text-align:center">very low (12.5 min extract + 2 s fit)</td>
+<td style="text-align:center">~50 ms/img (GPU, ViT)</td>
+<td>zero trainable backbone</td>
+</tr>
+</tbody>
+</table>
+<p>V4 reaches <strong>~99% of V3's accuracy</strong> with roughly <strong>1/10 of the total time</strong> and zero backbone training — the most favorable trade-off for rapid onboarding of new classes.</p>
+<p>Inference costs are indicative per-image estimates on the same hardware; only V1's CPU latency was measured directly.</p>
+<hr>
+<h2 id="5-failure-analysis">5. Failure Analysis</h2>
+<h3 id="51-v1--failure-modes">5.1 V1 — Failure Modes</h3>
+<p>V1's confusion matrix shows three main failure patterns:</p>
+<ul>
+<li><strong>Color-degenerate confusions.</strong> Apple healthy vs. Apple scab and Tomato healthy vs. Tomato early blight are systematically confused because their texture signatures (HOG gradients) are similar; the discriminating signal lies in color hues that grayscale processing destroys.</li>
+<li><strong>Within-species disease confusion.</strong> Multiple Tomato diseases (early blight, late blight, septoria leaf spot) collapse onto each other — all produce roughly circular dark lesions on green tissue, and HOG cannot distinguish lesion morphology at this resolution.</li>
+<li><strong>Background dominance.</strong> Some images include substantial background; HOG aggregates gradients globally and is sensitive to non-leaf textures.</li>
+</ul>
+<p align="center"><img src="results/plots/v1_f1_per_class.png" alt="V1 per-class F1" width="70%"></p>
+*Figure 10 — V1 per-class F1. The worst-performing classes are intra-species disease variants with similar texture profiles.*
+<h3 id="52-v2--v3--residual-errors">5.2 V2 / V3 — Residual Errors</h3>
+<p>For both deep models, residual errors (~0.1–0.4%) cluster on <strong>biologically close diseases</strong>:</p>
+<ul>
+<li>Tomato early blight vs. Septoria leaf spot — both produce small dark lesions with concentric rings.</li>
+<li>Corn (maize) Northern Leaf Blight vs. Cercospora Leaf Spot — overlapping lesion shapes at early stages.</li>
+</ul>
+<p>Inspecting misclassified samples reveals that the worst-performing classes are systematically those with <strong>subtle visual differences</strong> even for human experts.</p>
+<p align="center"><img src="results/plots/v2_f1_per_class.png" alt="V2 per-class F1" width="70%"></p>
+*Figure 11 — V2 per-class F1, mean ~99.6%, residual gap on a few biologically close classes.*
+<p align="center"><img src="results/plots/v3_f1_per_class.png" alt="V3 per-class F1" width="70%"></p>
+*Figure 12 — V3 per-class F1, the most uniform distribution across all 38 classes.*
+<h3 id="53-v4--failure-modes">5.3 V4 — Failure Modes</h3>
+<p>V4 errors concentrate on the same biologically ambiguous pairs as V3, plus a small additional gap on classes whose visual features lie far from DINOv3's natural-image pre-training distribution (e.g. highly stylized macro shots). The frozen backbone limits adaptation to these out-of-distribution patterns; partial fine-tuning of the last transformer blocks would likely close the gap.</p>
+<p align="center"><img src="results/plots/v4_f1_per_class.png" alt="V4 per-class F1" width="70%"></p>
+*Figure 13 — V4 per-class F1, mean ~98.3% with no class below 0.85.*
+<p align="center"><img src="results/plots/v4_knn_vs_linprobe.png" alt="V4 k-NN vs. Linear Probe" width="70%"></p>
+*Figure 14 — Comparison of the two probes on top of frozen DINOv3 features: linear probe edges out k-NN by 0.10 points, evidence of an already linearly separable embedding space.*
+<h3 id="54-cross-cutting-observations">5.4 Cross-Cutting Observations</h3>
+<ul>
+<li>All models perform worst on <strong>diseases with similar macroscopic appearance</strong>, not on rare classes — the offline augmentation keeps per-class support roughly balanced.</li>
+<li>No version shows a strong correlation between class accuracy and class size, suggesting that the long-tail effect is largely absorbed by the augmentation + balanced training.</li>
+<li>Misclassifications are predominantly <strong>biologically plausible</strong>: errors fall within the same crop, rarely across species. This is a desirable property — a real-world deployment would still trigger a meaningful diagnostic workflow.</li>
+</ul>
+<hr>
+<h2 id="6-ethical-considerations">6. Ethical Considerations</h2>
+<h3 id="61-dataset-bias">6.1 Dataset Bias</h3>
+<p>PlantVillage was collected under <strong>controlled laboratory conditions</strong>: uniform backgrounds, even lighting, single leaves per image. Models trained exclusively on PlantVillage show known <strong>degradation when deployed on real-field photographs</strong> with cluttered backgrounds, multiple leaves, occlusions, and variable lighting (Mohanty et al., 2016; Ferentinos, 2018). A production system would require domain adaptation or additional in-field training data.</p>
+<h3 id="62-geographic-and-crop-coverage-bias">6.2 Geographic and Crop Coverage Bias</h3>
+<p>The 38 classes cover 14 crop species concentrated in <strong>temperate-zone agriculture</strong> (apple, grape, peach, tomato, corn). Tropical crops central to food security in many low-income countries (cassava, yam, plantain, millet) are <strong>absent</strong>. Deploying this exact model in regions where these crops dominate would systematically fail and could mislead farmers — an equity-and-accessibility concern that must be flagged in any documentation.</p>
+<h3 id="63-risk-of-misuse-and-over-reliance">6.3 Risk of Misuse and Over-Reliance</h3>
+<p>Automated diagnosis produced as a confident class label may discourage farmers from seeking expert consultation in ambiguous cases. Best practice is to:</p>
+<ul>
+<li>Surface <strong>prediction confidence</strong> (softmax max or temperature-scaled probability) and recommend expert review below a threshold.</li>
+<li>Avoid prescriptive treatment recommendations from a classifier whose output space does not include &quot;unknown&quot;.</li>
+</ul>
+<h3 id="64-privacy">6.4 Privacy</h3>
+<p>Images of fields, farm equipment, or geo-tagged crops can reveal commercially sensitive information (cultivation density, infection status of a competitor's farm) or, when combined with location metadata, the identity of individual farms. A deployed application should:</p>
+<ul>
+<li>Strip EXIF metadata (GPS, device IDs) before any upload.</li>
+<li>Process inference <strong>on-device</strong> where possible.</li>
+<li>Provide clear consent flows before transmitting images to remote servers.</li>
+</ul>
+<h3 id="65-environmental-footprint">6.5 Environmental Footprint</h3>
+<p>V3 required ~2 hours of GPU training. The marginal accuracy gain over V4 (~1.5 points) comes at a measurable energy cost. V4 — frozen backbone + 2-second linear probe — illustrates a <strong>green-AI alternative</strong> that achieves &gt;98% accuracy at a fraction of the carbon footprint.</p>
+<h3 id="66-responsible-deployment-checklist">6.6 Responsible Deployment Checklist</h3>
+<ul>
+<li><input type="checkbox" id="checkbox0"><label for="checkbox0">Document dataset provenance and known biases to end users.</label></li>
+<li><input type="checkbox" id="checkbox1"><label for="checkbox1">Include uncertainty estimates in every prediction.</label></li>
+<li><input type="checkbox" id="checkbox2"><label for="checkbox2">Provide a fallback to expert consultation.</label></li>
+<li><input type="checkbox" id="checkbox3"><label for="checkbox3">Strip identifying metadata before transmission.</label></li>
+<li><input type="checkbox" id="checkbox4"><label for="checkbox4">Validate on in-field images before production deployment.</label></li>
+</ul>
+<hr>
+<h2 id="7-conclusions">7. Conclusions</h2>
+<p>This work compared four progressively more sophisticated approaches to plant disease classification. Three findings are worth highlighting:</p>
+<ol>
+<li><strong>Learned representations dominate handcrafted ones for fine-grained color-sensitive tasks</strong> — the &gt;24-point gap between V1 and the deep models is decisive.</li>
+<li><strong>For saturated datasets, supervised fine-tuning of a pre-trained backbone is the highest-accuracy recipe</strong> (V3, 99.87%), but the marginal gain over a well-designed custom CNN (V2, 99.66%) is small — and V3 reaches its peak in less than half the wall time.</li>
+<li><strong>Self-supervised foundation models offer a strikingly favorable accuracy/cost trade-off</strong> — DINOv3 frozen + linear probe reaches 98.35% with zero backbone training, making it the most attractive option for rapid prototyping, new-class onboarding, and edge deployment.</li>
+</ol>
+<p>Future work should evaluate the same four pipelines on <strong>in-field imagery</strong> to quantify the domain-shift gap, and explore <strong>partial fine-tuning of DINOv3's last transformer blocks</strong> as a hybrid between the V3 and V4 recipes.</p>
+<hr>
+<h2 id="references">References</h2>
+<ul>
+<li>Mohanty, S. P., Hughes, D. P., &amp; Salathé, M. (2016). <em>Using deep learning for image-based plant disease detection.</em> Frontiers in Plant Science, 7.</li>
+<li>Ferentinos, K. P. (2018). <em>Deep learning models for plant disease detection and diagnosis.</em> Computers and Electronics in Agriculture, 145.</li>
+<li>He, K., Zhang, X., Ren, S., &amp; Sun, J. (2016). <em>Deep residual learning for image recognition.</em> CVPR.</li>
+<li>Dalal, N., &amp; Triggs, B. (2005). <em>Histograms of oriented gradients for human detection.</em> CVPR.</li>
+<li>Oquab, M., et al. (2024). <em>DINOv2: Learning robust visual features without supervision.</em> TMLR. (Methodological reference for the DINOv3 family.)</li>
+<li>FAO (2021). <em>The impact of disasters and crises on agriculture and food security.</em> Food and Agriculture Organization of the United Nations.</li>
+</ul>
+<hr>
+<h2 id="appendix-a--validation-on-the-non-augmented-plantvillage-dataset-og-dataset-branch">Appendix A — Validation on the Non-Augmented PlantVillage Dataset (<code>og-dataset</code> branch)</h2>
+<blockquote>
+<p><strong>Status:</strong> complete re-run. All four versions (V1–V4) have been re-executed end-to-end on the non-augmented dataset.</p>
+</blockquote>
+<h3 id="a1-motivation">A.1 Motivation</h3>
+<p>§2.1 and §4.5 flag the central caveat of this study: the <strong>New Plant Diseases Dataset</strong> (<code>vipoooool/new-plant-diseases-dataset</code>) is <em>offline-augmented</em>, so geometric/colour variants of the same physical leaf land on both sides of the train/test boundary (63.3% source-level leak). §4.5 argues — via a post-hoc clean re-evaluation — that this leak is statistically irrelevant. The <code>og-dataset</code> branch turns that <em>argument</em> into a <em>direct experiment</em>: it re-runs the entire pipeline on <strong><code>mohitsingh1804/plantvillage</code></strong>, a non-augmented PlantVillage variant in which source-level leakage is <strong>impossible by construction</strong> (each physical leaf appears exactly once, before splitting).</p>
+<h3 id="a2-dataset-comparison">A.2 Dataset comparison</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:center"><code>main</code> (<code>vipoooool</code>)</th>
+<th style="text-align:center"><code>og-dataset</code> (<code>mohitsingh1804</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Offline augmentation</td>
+<td style="text-align:center">yes (baked into filenames)</td>
+<td style="text-align:center">none</td>
+</tr>
+<tr>
+<td>Total images</td>
+<td style="text-align:center">87,867</td>
+<td style="text-align:center">54,304</td>
+</tr>
+<tr>
+<td>Train / Val / Test</td>
+<td style="text-align:center">70,295 / 8,777 / 8,795</td>
+<td style="text-align:center">43,443 / 5,422 / 5,439</td>
+</tr>
+<tr>
+<td>Classes</td>
+<td style="text-align:center">38</td>
+<td style="text-align:center">38</td>
+</tr>
+<tr>
+<td>Source-level train↔test leak</td>
+<td style="text-align:center">63.3%</td>
+<td style="text-align:center">0% (by construction)</td>
+</tr>
+</tbody>
+</table>
+<p>The split protocol is unchanged: the dataset's <code>valid/</code> folder is split 50/50 into validation and test (<code>random_state=42</code>).</p>
+<h3 id="a3-methodological-refinements">A.3 Methodological refinements</h3>
+<p>Because the non-augmented dataset has a genuinely imbalanced (long-tail) class distribution — no longer flattened by per-class augmentation — the <code>og-dataset</code> evaluation adds:</p>
+<ul>
+<li><strong>Macro-averaged</strong> precision/recall/F1 alongside the weighted aggregates, to expose minority-class behaviour.</li>
+<li><code>class_weight='balanced'</code> on the V4 linear probe and <code>weights='distance'</code> on the V4 k-NN (k=20), to compensate for class imbalance.</li>
+</ul>
+<h3 id="a4-results-clean-dataset">A.4 Results (clean dataset)</h3>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Metric</th>
+<th style="text-align:center"><code>main</code> (augmented)</th>
+<th style="text-align:center"><code>og-dataset</code> (clean)</th>
+<th style="text-align:center">Δ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>V1 — HOG + SVM</td>
+<td>Accuracy</td>
+<td style="text-align:center">74.39%</td>
+<td style="text-align:center">74.74%</td>
+<td style="text-align:center">+0.35</td>
+</tr>
+<tr>
+<td></td>
+<td>F1 (weighted)</td>
+<td style="text-align:center">74.26%</td>
+<td style="text-align:center">74.90%</td>
+<td style="text-align:center">+0.64</td>
+</tr>
+<tr>
+<td></td>
+<td>F1 (macro)</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">70.32%</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td></td>
+<td>Inference</td>
+<td style="text-align:center">81 ms/img</td>
+<td style="text-align:center">39 ms/img</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>V4 — DINOv3 linear probe</td>
+<td>Accuracy</td>
+<td style="text-align:center">98.35%</td>
+<td style="text-align:center">98.16%</td>
+<td style="text-align:center">−0.19</td>
+</tr>
+<tr>
+<td></td>
+<td>F1 (weighted)</td>
+<td style="text-align:center">98.35%</td>
+<td style="text-align:center">98.18%</td>
+<td style="text-align:center">−0.17</td>
+</tr>
+<tr>
+<td></td>
+<td>F1 (macro)</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">97.95%</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>V4 — DINOv3 k-NN</td>
+<td>Accuracy</td>
+<td style="text-align:center">98.25%</td>
+<td style="text-align:center">97.90%</td>
+<td style="text-align:center">−0.35</td>
+</tr>
+<tr>
+<td>V3 — ResNet50 TL</td>
+<td>Accuracy</td>
+<td style="text-align:center">99.87%</td>
+<td style="text-align:center">99.72%</td>
+<td style="text-align:center">−0.15</td>
+</tr>
+<tr>
+<td></td>
+<td>F1 (weighted)</td>
+<td style="text-align:center">99.87%</td>
+<td style="text-align:center">99.72%</td>
+<td style="text-align:center">−0.15</td>
+</tr>
+<tr>
+<td></td>
+<td>F1 (macro)</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">99.59%</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>V2 — Custom CNN</td>
+<td>Accuracy</td>
+<td style="text-align:center">99.66%</td>
+<td style="text-align:center">99.54%</td>
+<td style="text-align:center">−0.12</td>
+</tr>
+<tr>
+<td></td>
+<td>F1 (weighted)</td>
+<td style="text-align:center">99.66%</td>
+<td style="text-align:center">99.54%</td>
+<td style="text-align:center">−0.12</td>
+</tr>
+<tr>
+<td></td>
+<td>F1 (macro)</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">99.37%</td>
+<td style="text-align:center">—</td>
+</tr>
+</tbody>
+</table>
+<h3 id="a5-interpretation">A.5 Interpretation</h3>
+<p>On a dataset where source-level leakage cannot occur, all four models reproduce their full-dataset numbers within <strong>±0.35 points</strong>. V1 is in fact marginally <em>higher</em> (+0.35 acc) despite training on <strong>~38% fewer images</strong> (43,443 vs 70,295); V2 drops by 0.12 points (99.54% vs 99.66%), V3 by 0.15 (99.72% vs 99.87%) and V4 by 0.19. This is a direct, independent confirmation of §4.5: the 63% augmentation leak on <code>main</code> was statistically irrelevant, and the models had learned genuine discriminative representations rather than memorising augmented duplicates. The healthy macro-F1 scores under the now-imbalanced class distribution (V2 99.37%, V3 99.59%, V4 97.95%) further show the result holds in a realistic long-tail regime, not only under the augmentation-balanced distribution of the original dataset.</p>
+<p>Across all four versions, the relative ranking is <strong>unchanged</strong> (V3 &gt; V2 &gt; V4 &gt; V1) and absolute scores move by at most 0.35 points — the project's conclusions are robust to the choice between the augmented and the clean dataset.</p>
+
+</body>
+</html>
