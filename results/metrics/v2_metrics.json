@@ -1,0 +1,12 @@
+{
+  "model": "V2_CustomCNN",
+  "accuracy": 0.9954,
+  "precision": 0.9954,
+  "recall": 0.9954,
+  "f1": 0.9954,
+  "precision_macro": 0.9938,
+  "recall_macro": 0.9936,
+  "f1_macro": 0.9937,
+  "best_epoch": 96,
+  "training_time_min": 204.41
+}
