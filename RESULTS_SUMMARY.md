@@ -8,7 +8,7 @@ Split: 70% train / 15% val / 15% test (stratified, seed=42)
 ## Tabella Metriche (test set)
 
 | Versione | Approccio | Accuracy | Precision | Recall | F1 |
-|----------|-----------|:--------:|:---------:|:------:|:--:|
+| ---------- | ----------- | :--------: | :---------: | :------: | :--: |
 | V1 — HOG + SVM | Shallow Learning | 74.39% | 74.62% | 74.39% | 74.26% |
 | V2 — Custom CNN | Deep Learning from scratch | 99.66% | 99.66% | 99.66% | 99.66% |
 | V3 — ResNet50 Transfer Learn. | Supervised TL + fine-tuning | 99.87% | 99.88% | 99.87% | 99.87% |
@@ -25,7 +25,7 @@ Split: 70% train / 15% val / 15% test (stratified, seed=42)
 ## Raccomandazioni per il Deployment
 
 | Scenario | Versione consigliata | Motivazione |
-|----------|----------------------|-------------|
+| ---------- | ---------------------- | ------------- |
 | Max accuracy, dataset fisso | **V3 (ResNet50 TL)** | Best score assoluto, parametri ragionevoli (~24M totali). |
 | Onboarding rapido di nuove classi | **V4 (DINOv3 + linear probe)** | Backbone congelato, basta riaddestrare il logistic regression in secondi. |
 | Edge / CPU-only / interpretabilità | **V1 (HOG+SVM)** | Modello piccolo, ispezionabile, ma accuracy ~75%. |

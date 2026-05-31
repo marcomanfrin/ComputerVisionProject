@@ -48,6 +48,9 @@ We implement four versions (V1–V4) covering the spectrum from classical comput
 * **Image size:** original 256×256, resized depending on the model (64×128 for V1 HOG, 224×224 for V2/V3, 224×224 with ImageNet normalization for V4).
 * **Augmentations (V2/V3, training only):** RandomRotation(±15°), RandomHorizontalFlip(p=0.5), ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2), RandomAffine(translate=0.1).
 
+![Dataset exploration: per-class image counts and sample leaves](results/plots/00_data_exploration.png)
+*Figure 1 — Class distribution and representative samples from PlantVillage.*
+
 ### 2.2 V1 — HOG + SVM (Shallow Learning)
 
 A handcrafted feature pipeline serves as the classical baseline.
@@ -106,7 +109,7 @@ All versions are evaluated on the same held-out test set (8,144 images) using:
 ## 3. Experimental Setup
 
 | Item | Value |
-|---|---|
+| --- | --- |
 | Dataset | PlantVillage, 54,303 images, 38 classes |
 | Split | 70 / 15 / 15 stratified, seed = 42 |
 | Hardware | NVIDIA GPU (16 GB VRAM), 32 GB RAM, macOS 25.5 |
@@ -120,7 +123,7 @@ All versions are evaluated on the same held-out test set (8,144 images) using:
 ### 4.1 Overall Comparison
 
 | Version | Approach | Accuracy | Precision | Recall | F1 | Train time | Trainable params |
-|---|---|:--:|:--:|:--:|:--:|:--:|:--:|
+| --- | --- | :--: | :--: | :--: | :--: | :--: | :--: |
 | V1 — HOG + SVM | Shallow Learning | 74.39% | 74.62% | 74.39% | 74.26% | 25 min | — |
 | V2 — Custom CNN | Deep Learning from scratch | 99.66% | 99.66% | 99.66% | 99.66% | 294 min | 660 k |
 | V3 — ResNet50 TL | Supervised fine-tuning | **99.87%** | **99.88%** | **99.87%** | **99.87%** | 128 min | 16.0 M |
@@ -128,7 +131,11 @@ All versions are evaluated on the same held-out test set (8,144 images) using:
 
 ¹ V4 time refers to embedding extraction over the full dataset; the linear probe itself fits in 1.95 s.
 
-> Visual summary: `results/plots/metrics_comparison.png`, `results/plots/tradeoff_time_params.png`.
+![Per-version accuracy / precision / recall / F1 bar chart](results/plots/metrics_comparison.png)
+*Figure 2 — Side-by-side comparison of weighted metrics across V1–V4.*
+
+![Training time vs. trainable parameters trade-off](results/plots/tradeoff_time_params.png)
+*Figure 3 — Training time vs. trainable parameters. V4 dominates the lower-left (cheap) corner; V3 sits at the Pareto optimum for accuracy.*
 
 ### 4.2 Discussion by Research Question
 
@@ -140,19 +147,37 @@ All versions are evaluated on the same held-out test set (8,144 images) using:
 
 ### 4.3 Training Dynamics
 
-V2 and V3 training curves are reported in `results/plots/v2_training_curves.png` and `results/plots/v3_training_curves.png`. Key observations:
+Key observations from the loss/accuracy curves:
 
 * **V2:** validation loss tracks training loss closely, no significant overfitting thanks to dropout + augmentation. Best checkpoint at epoch 80 over the full 100-epoch schedule.
 * **V3:** validation accuracy plateaus around 99.7% by epoch 10; the remaining nine epochs deliver marginal gains. Best checkpoint at epoch 19.
 
+![V2 training curves](results/plots/v2_training_curves.png)
+*Figure 4 — V2 Custom CNN training and validation loss/accuracy over 90 epochs.*
+
+![V3 training curves](results/plots/v3_training_curves.png)
+*Figure 5 — V3 ResNet50 training and validation loss/accuracy over 24 epochs.*
+
 ### 4.4 Confusion Matrices
 
-Confusion matrices for all four versions are saved in `results/plots/v{1,2,3,4}_confusion_matrix.png`. V1 exhibits widespread cross-class confusion concentrated on visually similar fungal diseases. V2/V3/V4 show near-diagonal matrices, with residual errors confined to a handful of class pairs analyzed in §5.
+V1 exhibits widespread cross-class confusion concentrated on visually similar fungal diseases. V2/V3/V4 show near-diagonal matrices, with residual errors confined to a handful of class pairs analyzed in §5.
+
+![V1 confusion matrix](results/plots/v1_confusion_matrix.png)
+*Figure 6 — V1 (HOG + SVM) confusion matrix. Off-diagonal mass concentrated on intra-species disease confusions.*
+
+![V2 confusion matrix](results/plots/v2_confusion_matrix.png)
+*Figure 7 — V2 (Custom CNN) confusion matrix. Near-diagonal pattern.*
+
+![V3 confusion matrix](results/plots/v3_confusion_matrix.png)
+*Figure 8 — V3 (ResNet50 TL) confusion matrix. Best overall, residual errors on biologically close pairs.*
+
+![V4 confusion matrix](results/plots/v4_confusion_matrix.png)
+*Figure 9 — V4 (DINOv3 + linear probe) confusion matrix. Comparable to V3 despite a fully frozen backbone.*
 
 ### 4.5 Accuracy / Cost Trade-off
 
 | Version | Accuracy | Train cost | Inference cost | Notes |
-|---|:--:|:--:|:--:|---|
+| --- | :--: | :--: | :--: | --- |
 | V1 | 74.4% | low (CPU) | 81 ms/img (CPU) | interpretable, no GPU |
 | V2 | 99.7% | very high (294 min GPU) | ~70 ms/img (GPU) | full architectural control |
 | V3 | 99.9% | high (128 min GPU) | ~90 ms/img (GPU) | best absolute score |
@@ -172,6 +197,9 @@ V1's confusion matrix shows three main failure patterns:
 * **Within-species disease confusion.** Multiple Tomato diseases (early blight, late blight, septoria leaf spot) collapse onto each other — all produce roughly circular dark lesions on green tissue, and HOG cannot distinguish lesion morphology at this resolution.
 * **Background dominance.** Some images include substantial background; HOG aggregates gradients globally and is sensitive to non-leaf textures.
 
+![V1 per-class F1](results/plots/v1_f1_per_class.png)
+*Figure 10 — V1 per-class F1. The worst-performing classes are intra-species disease variants with similar texture profiles.*
+
 ### 5.2 V2 / V3 — Residual Errors
 
 For both deep models, residual errors (~0.1–0.4%) cluster on **biologically close diseases**:
@@ -179,11 +207,23 @@ For both deep models, residual errors (~0.1–0.4%) cluster on **biologically cl
 * Tomato early blight vs. Septoria leaf spot — both produce small dark lesions with concentric rings.
 * Corn (maize) Northern Leaf Blight vs. Cercospora Leaf Spot — overlapping lesion shapes at early stages.
 
-Inspecting misclassified samples (see `results/plots/v3_f1_per_class.png`) reveals that the worst-performing classes are systematically those with **subtle visual differences** even for human experts.
+Inspecting misclassified samples reveals that the worst-performing classes are systematically those with **subtle visual differences** even for human experts.
+
+![V2 per-class F1](results/plots/v2_f1_per_class.png)
+*Figure 11 — V2 per-class F1, mean ~99.6%, residual gap on a few biologically close classes.*
+
+![V3 per-class F1](results/plots/v3_f1_per_class.png)
+*Figure 12 — V3 per-class F1, the most uniform distribution across all 38 classes.*
 
 ### 5.3 V4 — Failure Modes
 
 V4 errors concentrate on the same biologically ambiguous pairs as V3, plus a small additional gap on classes whose visual features lie far from DINOv3's natural-image pre-training distribution (e.g. highly stylized macro shots). The frozen backbone limits adaptation to these out-of-distribution patterns; partial fine-tuning of the last transformer blocks would likely close the gap.
+
+![V4 per-class F1](results/plots/v4_f1_per_class.png)
+*Figure 13 — V4 per-class F1, mean ~98.3% with no class below 0.85.*
+
+![V4 k-NN vs. Linear Probe](results/plots/v4_knn_vs_linprobe.png)
+*Figure 14 — Comparison of the two probes on top of frozen DINOv3 features: linear probe edges out k-NN by 0.10 points, evidence of an already linearly separable embedding space.*
 
 ### 5.4 Cross-Cutting Observations
 
