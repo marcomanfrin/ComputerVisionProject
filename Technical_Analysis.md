@@ -369,11 +369,13 @@ Because the non-augmented dataset has a genuinely imbalanced (long-tail) class d
 | | F1 (weighted) | 98.35% | 98.18% | −0.17 |
 | | F1 (macro) | — | 97.95% | — |
 | V4 — DINOv3 k-NN | Accuracy | 98.25% | 97.90% | −0.35 |
+| V3 — ResNet50 TL | Accuracy | 99.87% | 99.72% | −0.15 |
+| | F1 (weighted) | 99.87% | 99.72% | −0.15 |
+| | F1 (macro) | — | 99.59% | — |
 | V2 — Custom CNN | Accuracy | 99.66% | *pending re-run* | — |
-| V3 — ResNet50 TL | Accuracy | 99.87% | *pending re-run* | — |
 
 ### A.5 Interpretation
 
-On a dataset where source-level leakage cannot occur, the two completed models reproduce their full-dataset numbers within **±0.35 points**. V1 is in fact marginally *higher* (+0.35 acc) despite training on **~38% fewer images** (43,443 vs 70,295), and V4 drops by a negligible 0.19 points. This is a direct, independent confirmation of §4.5: the 63% augmentation leak on `main` was statistically irrelevant, and the models had learned genuine discriminative representations rather than memorising augmented duplicates. The healthy macro-F1 of V4 (97.95%) further shows the result holds under real class imbalance, not only under the augmentation-balanced regime of the original dataset.
+On a dataset where source-level leakage cannot occur, the three completed models reproduce their full-dataset numbers within **±0.35 points**. V1 is in fact marginally *higher* (+0.35 acc) despite training on **~38% fewer images** (43,443 vs 70,295); V3 drops by a negligible 0.15 points (99.72% vs 99.87%) and V4 by 0.19. This is a direct, independent confirmation of §4.5: the 63% augmentation leak on `main` was statistically irrelevant, and the models had learned genuine discriminative representations rather than memorising augmented duplicates. The healthy macro-F1 scores under the now-imbalanced class distribution (V3 99.59%, V4 97.95%) further show the result holds in a realistic long-tail regime, not only under the augmentation-balanced distribution of the original dataset.
 
-The pending V2/V3 re-runs are expected to confirm the same pattern; this appendix will be updated once they complete.
+The pending V2 re-run is expected to confirm the same pattern; this appendix will be updated once it completes.

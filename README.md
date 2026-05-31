@@ -195,9 +195,9 @@ The `og-dataset` branch re-runs the full pipeline on a **non-augmented** PlantVi
 | Version | `main` (augmented) | `og-dataset` (clean) | Δ acc |
 |---|:--:|:--:|:--:|
 | V1 — HOG + SVM | 74.39% | 74.74% | +0.35 |
+| V3 — ResNet50 TL | 99.87% | 99.72% | −0.15 |
 | V4 — DINOv3 + LinProbe | 98.35% | 98.16% | −0.19 |
 | V2 — Custom CNN | 99.66% | *pending* | — |
-| V3 — ResNet50 TL | 99.87% | *pending* | — |
 
 The completed models reproduce within ±0.35 pts — V1 even higher despite ~38% fewer training images — independently confirming that the augmentation leak was statistically irrelevant. Full discussion: [`Technical_Analysis.md`](Technical_Analysis.md) §Appendix A.
 
