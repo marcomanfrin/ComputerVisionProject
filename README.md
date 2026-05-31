@@ -15,7 +15,7 @@ Plant diseases cause an estimated 20–40% of global crop loss every year. This 
 | **V3** | ResNet50 fine-tuning | Supervised transfer learning |
 | **V4** | DINOv3 ViT-B/16 + linear probe | Self-supervised foundation models |
 
-**Dataset:** PlantVillage — 54,303 RGB leaf images, 38 classes (14 crops × healthy + disease variants), split 70 / 15 / 15 (stratified, seed = 42).
+**Dataset:** New Plant Diseases Dataset (Kaggle) — an offline-augmented derivative of PlantVillage, 87,867 RGB leaf images, 38 classes (14 crops × healthy + disease variants). The dataset's `train/` folder (70,295 images) is used as-is; its `valid/` folder (17,572 images) is split 50/50 into validation (8,777) and test (8,795) with seed = 42 (effective split ≈ 80 / 10 / 10).
 
 ---
 
@@ -39,7 +39,7 @@ Full analysis: [`Technical_Analysis.md`](Technical_Analysis.md) · Concise summa
 ```text
 ComputerVisionProject/
 ├── notebooks/
-│   ├── 00_setup_and_data.ipynb            # Dataset download + stratified split
+│   ├── 00_setup_and_data.ipynb            # Dataset download + val/test split
 │   ├── 01_v1_hog_svm.ipynb                # V1 — HOG + SVM
 │   ├── 02_v2_custom_cnn.ipynb             # V2 — Custom CNN from scratch
 │   ├── 02_v2_fast_custom_cnn.ipynb        # V2 — short-schedule variant
@@ -47,11 +47,9 @@ ComputerVisionProject/
 │   ├── 04_v4_dinov3_probe.ipynb           # V4 — DINOv3 + linear/k-NN probe
 │   ├── 05_comparison_and_analysis.ipynb   # Cross-version benchmark
 │   └── 06_prepare_documentation.ipynb     # Regenerates RESULTS_SUMMARY.md
-├── src/
-│   └── utils.py                           # Shared helpers (metrics, plotting)
 ├── data/
 │   ├── raw/                               # Original PlantVillage images (gitignored)
-│   └── processed/                         # train/val/test stratified splits
+│   └── processed/                         # train/val/test splits
 ├── results/
 │   ├── models/                            # Saved checkpoints (gitignored)
 │   ├── metrics/                           # Per-version JSON + comparison CSVs
@@ -157,14 +155,14 @@ Task type: **multi-class classification** (38 classes, weighted aggregation for 
 - **Confusion matrix** — 38×38 per version, saved as PNG
 - **Per-class F1** — to identify the hardest classes
 
-All metrics are computed on the held-out test set (8,144 images) and stored as JSON in `results/metrics/`.
+All metrics are computed on the held-out test set (8,795 images) and stored as JSON in `results/metrics/`.
 
 ---
 
 ## Reproducibility
 
 - All seeds fixed (`random_state=42` for NumPy, PyTorch, sklearn, split).
-- Stratified split deterministic across runs.
+- The val/test split of the dataset's `valid/` folder is deterministic across runs (seed = 42).
 - V4 embeddings cached in `results/models/v4_dinov3_probe/embeddings/*.npz` — regenerable in ~13 minutes.
 - Model checkpoints excluded from git via `.gitignore`.
 

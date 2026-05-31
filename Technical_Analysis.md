@@ -9,7 +9,7 @@
 
 ## Abstract
 
-This work presents a comparative analysis of four progressively more sophisticated approaches to plant disease classification on the **PlantVillage** dataset (54,303 images, 38 classes). We benchmark (i) a classical handcrafted pipeline (HOG + SVM), (ii) a custom CNN trained from scratch, (iii) a fine-tuned ResNet50 (supervised transfer learning), and (iv) a frozen DINOv3 ViT-B/16 backbone with a linear probe (self-supervised foundation model). Results show that all deep approaches surpass 98% accuracy on the held-out test set, with the supervised fine-tuned ResNet50 reaching **99.87%**, while the frozen DINOv3 backbone with a linear probe achieves **98.35%** with **zero trainable backbone parameters**, validating the practical value of modern foundation models for low-data domain adaptation.
+This work presents a comparative analysis of four progressively more sophisticated approaches to plant disease classification on the **New Plant Diseases Dataset** — an offline-augmented version of PlantVillage (87,867 images, 38 classes). We benchmark (i) a classical handcrafted pipeline (HOG + SVM), (ii) a custom CNN trained from scratch, (iii) a fine-tuned ResNet50 (supervised transfer learning), and (iv) a frozen DINOv3 ViT-B/16 backbone with a linear probe (self-supervised foundation model). Results show that all deep approaches surpass 98% accuracy on the held-out test set, with the supervised fine-tuned ResNet50 reaching **99.87%**, while the frozen DINOv3 backbone with a linear probe achieves **98.35%** with **zero trainable backbone parameters**, validating the practical value of modern foundation models for efficient domain adaptation.
 
 ---
 
@@ -43,13 +43,14 @@ We implement four versions (V1–V4) covering the spectrum from classical comput
 
 ### 2.1 Dataset and Preprocessing
 
-* **Dataset:** PlantVillage (Mohanty et al., 2016), 54,303 RGB images, 38 classes (14 crops × healthy + disease variants).
-* **Split:** 70% train / 15% validation / 15% test, **stratified** by class, fixed `random_state=42`.
-* **Image size:** original 256×256, resized depending on the model (64×128 for V1 HOG, 224×224 for V2/V3, 224×224 with ImageNet normalization for V4).
+* **Dataset:** New Plant Diseases Dataset (Kaggle, *vipoooool*) — an offline-augmented derivative of PlantVillage (Mohanty et al., 2016). 87,867 RGB images, 38 classes (14 crops × healthy + disease variants).
+* **Split:** the dataset ships with a fixed `train/` folder (70,295 images) and a `valid/` folder (17,572 images); we split the latter 50/50 (`random_state=42`) into validation (8,777) and test (8,795). Effective split ≈ 80% / 10% / 10%.
+* **Note on augmentation:** because augmentation is baked into the dataset offline, augmented variants of the same source leaf may fall on both sides of the train/validation boundary. This likely inflates the absolute accuracies reported below and should be read as a caveat on the >99% figures.
+* **Image size:** images are 256×256, resized depending on the model (64×128 for V1 HOG, 224×224 for V2/V3, 224×224 with ImageNet normalization for V4).
 * **Augmentations (V2/V3, training only):** RandomRotation(±15°), RandomHorizontalFlip(p=0.5), ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2), RandomAffine(translate=0.1).
 
 ![Dataset exploration: per-class image counts and sample leaves](results/plots/00_data_exploration.png)
-*Figure 1 — Class distribution and representative samples from PlantVillage.*
+*Figure 1 — Class distribution and representative samples from the New Plant Diseases Dataset.*
 
 ### 2.2 V1 — HOG + SVM (Shallow Learning)
 
@@ -61,7 +62,7 @@ A handcrafted feature pipeline serves as the classical baseline.
 
 ### 2.3 V2 — Custom CNN from Scratch (Deep Learning)
 
-A purpose-built convolutional architecture trained end-to-end on PlantVillage.
+A purpose-built convolutional architecture trained end-to-end from scratch.
 
 * **Architecture (~660k trainable parameters):**
   * `Conv(3→32, 3×3) + BN + ReLU + MaxPool(2×2)`
@@ -71,7 +72,7 @@ A purpose-built convolutional architecture trained end-to-end on PlantVillage.
   * `Dense(256→512) + ReLU + Dropout(0.5)`
   * `Dense(512→256) + ReLU + Dropout(0.3)`
   * `Dense(256→38) + Softmax`
-* **Training:** CrossEntropyLoss, Adam (lr=1e-3), ReduceLROnPlateau (patience=5, factor=0.1), early stopping on validation loss (patience=10).
+* **Training:** CrossEntropyLoss, Adam (lr=1e-3), ReduceLROnPlateau (patience=5, factor=0.1), early stopping on validation loss (patience=10). Best checkpoint at epoch 80; training stopped at epoch 90.
 * **Rationale:** validates the hypothesis that a modest CNN, given sufficient data, can learn discriminative features end-to-end without manual feature engineering.
 
 ### 2.4 V3 — ResNet50 Transfer Learning (Supervised Fine-tuning)
@@ -97,7 +98,7 @@ The most modern approach: a foundation model pre-trained without labels.
 
 ### 2.6 Evaluation Protocol
 
-All versions are evaluated on the same held-out test set (8,144 images) using:
+All versions are evaluated on the same held-out test set (8,795 images) using:
 
 * **Accuracy** — overall correctness.
 * **Precision (weighted)**, **Recall (weighted)**, **F1-score (weighted)** — class-imbalance-aware aggregates.
@@ -110,11 +111,11 @@ All versions are evaluated on the same held-out test set (8,144 images) using:
 
 | Item | Value |
 | --- | --- |
-| Dataset | PlantVillage, 54,303 images, 38 classes |
-| Split | 70 / 15 / 15 stratified, seed = 42 |
-| Hardware | NVIDIA GPU (16 GB VRAM), 32 GB RAM, macOS 25.5 |
-| Frameworks | PyTorch 2.1, torchvision, scikit-learn 1.3, OpenCV 4.8, HuggingFace Transformers |
-| Reproducibility | All seeds fixed (NumPy, PyTorch, sklearn); deterministic split |
+| Dataset | New Plant Diseases Dataset (augmented PlantVillage), 87,867 images, 38 classes |
+| Split | train 70,295 / val 8,777 / test 8,795 (≈ 80 / 10 / 10), seed = 42 |
+| Hardware | Apple Silicon (MPS backend), macOS 25.5 |
+| Frameworks | PyTorch 2.12, torchvision, scikit-learn 1.3, OpenCV 4.8, HuggingFace Transformers |
+| Reproducibility | All seeds fixed (NumPy, PyTorch, sklearn); deterministic val/test split |
 
 ---
 
@@ -185,6 +186,8 @@ V1 exhibits widespread cross-class confusion concentrated on visually similar fu
 
 V4 reaches **~99% of V3's accuracy** with roughly **1/10 of the total time** and zero backbone training — the most favorable trade-off for rapid onboarding of new classes.
 
+Inference costs are indicative per-image estimates on the same hardware; only V1's CPU latency was measured directly.
+
 ---
 
 ## 5. Failure Analysis
@@ -227,7 +230,7 @@ V4 errors concentrate on the same biologically ambiguous pairs as V3, plus a sma
 
 ### 5.4 Cross-Cutting Observations
 
-* All models perform worst on **diseases with similar macroscopic appearance**, not on rare classes — the stratified split keeps support balanced.
+* All models perform worst on **diseases with similar macroscopic appearance**, not on rare classes — the offline augmentation keeps per-class support roughly balanced.
 * No version shows a strong correlation between class accuracy and class size, suggesting that the long-tail effect is largely absorbed by the augmentation + balanced training.
 * Misclassifications are predominantly **biologically plausible**: errors fall within the same crop, rarely across species. This is a desirable property — a real-world deployment would still trigger a meaningful diagnostic workflow.
 

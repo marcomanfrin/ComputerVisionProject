@@ -1,14 +1,14 @@
 # Plant Disease Detection — Results Summary
 
-_Generated: 2026-05-30 20:17_
+_Generated: 2026-05-31 11:27_
 
-Dataset: **Plant Village** (~54.000 immagini, 38 classi)  
-Split: 70% train / 15% val / 15% test (stratified, seed=42)
+Dataset: **New Plant Diseases Dataset** (PlantVillage augmentato, 87.867 immagini, 38 classi)  
+Split: train 70.295 / val 8.777 / test 8.795 (≈ 80/10/10, valid/ diviso 50/50 con seed=42)
 
 ## Tabella Metriche (test set)
 
 | Versione | Approccio | Accuracy | Precision | Recall | F1 |
-| ---------- | ----------- | :--------: | :---------: | :------: | :--: |
+|----------|-----------|:--------:|:---------:|:------:|:--:|
 | V1 — HOG + SVM | Shallow Learning | 74.39% | 74.62% | 74.39% | 74.26% |
 | V2 — Custom CNN | Deep Learning from scratch | 99.66% | 99.66% | 99.66% | 99.66% |
 | V3 — ResNet50 Transfer Learn. | Supervised TL + fine-tuning | 99.87% | 99.88% | 99.87% | 99.87% |
@@ -22,10 +22,12 @@ Split: 70% train / 15% val / 15% test (stratified, seed=42)
 - **Transfer learning più veloce di un custom CNN:** V3 converge in 19 epoch (~128 min) vs V2 80 epoch (~294 min).
 - **V4 k-NN vs Linear Probe:** k-NN 98.25% vs LinProbe 98.35%. Il linear probe sfrutta meglio la struttura globale dello spazio di feature.
 
+> ⚠️ **Nota sull'augmentation:** il dataset è augmentato offline, quindi varianti augmentate della stessa foglia sorgente possono finire sia in train sia in val/test. Questo gonfia probabilmente le accuracy assolute (>99%) e va letto come caveat sui risultati.
+
 ## Raccomandazioni per il Deployment
 
 | Scenario | Versione consigliata | Motivazione |
-| ---------- | ---------------------- | ------------- |
+|----------|----------------------|-------------|
 | Max accuracy, dataset fisso | **V3 (ResNet50 TL)** | Best score assoluto, parametri ragionevoli (~24M totali). |
 | Onboarding rapido di nuove classi | **V4 (DINOv3 + linear probe)** | Backbone congelato, basta riaddestrare il logistic regression in secondi. |
 | Edge / CPU-only / interpretabilità | **V1 (HOG+SVM)** | Modello piccolo, ispezionabile, ma accuracy ~75%. |
