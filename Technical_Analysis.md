@@ -114,7 +114,7 @@ All versions are evaluated on the same held-out test set (8,795 images) using:
 | Dataset | New Plant Diseases Dataset (augmented PlantVillage), 87,867 images, 38 classes |
 | Split | train 70,295 / val 8,777 / test 8,795 (≈ 80 / 10 / 10), seed = 42 |
 | Hardware | Apple Silicon (MPS backend), macOS 25.5 |
-| Frameworks | PyTorch 2.12, torchvision, scikit-learn 1.3, OpenCV 4.8, HuggingFace Transformers |
+| Frameworks | PyTorch 2.1, torchvision, scikit-learn 1.3, OpenCV 4.8, HuggingFace Transformers |
 | Reproducibility | All seeds fixed (NumPy, PyTorch, sklearn); deterministic val/test split |
 
 ---
