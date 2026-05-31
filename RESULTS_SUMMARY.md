@@ -22,7 +22,7 @@ Split: train 70,295 / val 8,777 / test 8,795 (≈ 80/10/10, valid/ split 50/50 w
 - **Transfer learning faster than a custom CNN:** V3 converges in 19 epochs (~128 min) vs V2 80 epochs (~294 min).
 - **V4 k-NN vs Linear Probe:** k-NN 98.25% vs LinProbe 98.35%. The linear probe exploits the global structure of the feature space better.
 
-> ⚠️ **Note on augmentation:** the dataset is augmented offline, so augmented variants of the same source leaf can end up in both train and val/test. This likely inflates the absolute accuracies (>99%) and should be read as a caveat on the results.
+> 🔬 **Leak analysis (notebook 07):** the dataset is augmented offline, so augmented copies of the same source leaf can land in both train and val/test. We quantified the leak by stripping augmentation suffixes (`_90deg`, `_flipLR`, …) to recover source identities. Result: **63.3%** of test source IDs are also in train (5,732 / 8,795 images). However, re-evaluating the trained checkpoints on the leak-free 3,063-image subset shows the clean accuracy is within ±0.16 pts of the published full-test number for every model — V3 and V4 are in fact marginally _higher_ on the clean subset. **The leak is statistically irrelevant** for these results; the models learned a genuine representation, not augmented duplicates. Details in `Technical_Analysis.md` §4.5.
 
 ## Deployment Recommendations
 

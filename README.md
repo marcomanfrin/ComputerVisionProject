@@ -46,7 +46,8 @@ ComputerVisionProject/
 │   ├── 03_v3_transfer_learning.ipynb      # V3 — ResNet50 fine-tuning
 │   ├── 04_v4_dinov3_probe.ipynb           # V4 — DINOv3 + linear/k-NN probe
 │   ├── 05_comparison_and_analysis.ipynb   # Cross-version benchmark
-│   └── 06_prepare_documentation.ipynb     # Regenerates RESULTS_SUMMARY.md
+│   ├── 06_prepare_documentation.ipynb     # Regenerates RESULTS_SUMMARY.md
+│   └── 07_leak_analysis_and_clean_eval.ipynb  # Leak quantification + clean re-evaluation
 ├── data/
 │   ├── raw/                               # Original PlantVillage images (gitignored)
 │   └── processed/                         # train/val/test splits
@@ -117,6 +118,7 @@ jupyter notebook notebooks/
 | 5 | `04_v4_dinov3_probe` | cached embeddings + `v4_metrics.json` |
 | 6 | `05_comparison_and_analysis` | `comparison_table.csv`, `summary_table.csv`, comparison plots |
 | 7 | `06_prepare_documentation` | regenerates `RESULTS_SUMMARY.md` and `export_for_report.json` |
+| 8 | `07_leak_analysis_and_clean_eval` | `leak_quantification.json`, `leak_per_class.csv`, `clean_test_metrics.json`, `leak_per_class.png`, `clean_vs_full_test.png` |
 
 Notebooks `02`, `03`, `04` benefit from a CUDA-enabled GPU but fall back to CPU.
 
@@ -165,6 +167,10 @@ All metrics are computed on the held-out test set (8,795 images) and stored as J
 - The val/test split of the dataset's `valid/` folder is deterministic across runs (seed = 42).
 - V4 embeddings cached in `results/models/v4_dinov3_probe/embeddings/*.npz` — regenerable in ~13 minutes.
 - Model checkpoints excluded from git via `.gitignore`.
+
+## Data leakage — quantified
+
+The Kaggle dataset is offline-augmented: each source leaf is duplicated under rotations / flips / colour perturbations (suffixes `_90deg`, `_flipLR`, `_new30degFlipLR`, …) before the train/valid split. Notebook 07 strips these suffixes to recover source identities and shows **63.3% of test source IDs are also in train** (5,732 / 8,795 images). Re-evaluating the trained V2 / V3 / V4 checkpoints on the leak-free 3,063-image subset returns accuracies within ±0.16 pts of the published full-test numbers — for V3 and V4 the clean accuracy is marginally *higher*. The leak is statistically irrelevant for these results because the augmentations are exactly the invariances deep models learn to discard. See `Technical_Analysis.md` §4.5 for the full analysis.
 
 ---
 
