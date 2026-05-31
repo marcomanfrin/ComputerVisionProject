@@ -332,7 +332,7 @@ Future work should evaluate the same four pipelines on **in-field imagery** to q
 
 ## Appendix A — Validation on the Non-Augmented PlantVillage Dataset (`og-dataset` branch)
 
-> **Status:** partial re-run. V1 and V4 are complete; V2 and V3 are still being re-executed and are reported as *pending* below. Numbers will be finalized once the full pipeline has run.
+> **Status:** complete re-run. All four versions (V1–V4) have been re-executed end-to-end on the non-augmented dataset.
 
 ### A.1 Motivation
 
@@ -372,10 +372,12 @@ Because the non-augmented dataset has a genuinely imbalanced (long-tail) class d
 | V3 — ResNet50 TL | Accuracy | 99.87% | 99.72% | −0.15 |
 | | F1 (weighted) | 99.87% | 99.72% | −0.15 |
 | | F1 (macro) | — | 99.59% | — |
-| V2 — Custom CNN | Accuracy | 99.66% | *pending re-run* | — |
+| V2 — Custom CNN | Accuracy | 99.66% | 99.54% | −0.12 |
+| | F1 (weighted) | 99.66% | 99.54% | −0.12 |
+| | F1 (macro) | — | 99.37% | — |
 
 ### A.5 Interpretation
 
-On a dataset where source-level leakage cannot occur, the three completed models reproduce their full-dataset numbers within **±0.35 points**. V1 is in fact marginally *higher* (+0.35 acc) despite training on **~38% fewer images** (43,443 vs 70,295); V3 drops by a negligible 0.15 points (99.72% vs 99.87%) and V4 by 0.19. This is a direct, independent confirmation of §4.5: the 63% augmentation leak on `main` was statistically irrelevant, and the models had learned genuine discriminative representations rather than memorising augmented duplicates. The healthy macro-F1 scores under the now-imbalanced class distribution (V3 99.59%, V4 97.95%) further show the result holds in a realistic long-tail regime, not only under the augmentation-balanced distribution of the original dataset.
+On a dataset where source-level leakage cannot occur, all four models reproduce their full-dataset numbers within **±0.35 points**. V1 is in fact marginally *higher* (+0.35 acc) despite training on **~38% fewer images** (43,443 vs 70,295); V2 drops by 0.12 points (99.54% vs 99.66%), V3 by 0.15 (99.72% vs 99.87%) and V4 by 0.19. This is a direct, independent confirmation of §4.5: the 63% augmentation leak on `main` was statistically irrelevant, and the models had learned genuine discriminative representations rather than memorising augmented duplicates. The healthy macro-F1 scores under the now-imbalanced class distribution (V2 99.37%, V3 99.59%, V4 97.95%) further show the result holds in a realistic long-tail regime, not only under the augmentation-balanced distribution of the original dataset.
 
-The pending V2 re-run is expected to confirm the same pattern; this appendix will be updated once it completes.
+Across all four versions, the relative ranking is **unchanged** (V3 > V2 > V4 > V1) and absolute scores move by at most 0.35 points — the project's conclusions are robust to the choice between the augmented and the clean dataset.
