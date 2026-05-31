@@ -1,5 +1,0 @@
-Version,Model,Approach,Accuracy,Precision,Recall,F1,Train time (min),Trainable params,Note
-V1,V1_HOG_SVM,Shallow Learning,0.7439,0.7462,0.7439,0.7426,25.24,,"HOG+SVM, RBF kernel"
-V2,V2_CustomCNN,Custom CNN from scratch,0.9966,0.9966,0.9966,0.9966,294.14,661574.0,"Best epoch 80, early stop"
-V3,V3_ResNet50_TransferLearning,Transfer Learning (fine-tune),0.9987,0.9988,0.9987,0.9987,127.81,16033318.0,"ResNet50, layer4 fine-tuned, best epoch 19"
-V4,V4_DINOv3_FrozenBackbone,SSL Foundation Model + Linear Probe,0.9835,0.9839,0.9835,0.9835,12.49,0.0,DINOv3 ViT-B/16 frozen + linear_probe (embed dim 768)
