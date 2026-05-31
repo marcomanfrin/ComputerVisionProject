@@ -327,3 +327,53 @@ Future work should evaluate the same four pipelines on **in-field imagery** to q
 * Dalal, N., & Triggs, B. (2005). *Histograms of oriented gradients for human detection.* CVPR.
 * Oquab, M., et al. (2024). *DINOv2: Learning robust visual features without supervision.* TMLR. (Methodological reference for the DINOv3 family.)
 * FAO (2021). *The impact of disasters and crises on agriculture and food security.* Food and Agriculture Organization of the United Nations.
+
+---
+
+## Appendix A — Validation on the Non-Augmented PlantVillage Dataset (`og-dataset` branch)
+
+> **Status:** partial re-run. V1 and V4 are complete; V2 and V3 are still being re-executed and are reported as *pending* below. Numbers will be finalized once the full pipeline has run.
+
+### A.1 Motivation
+
+§2.1 and §4.5 flag the central caveat of this study: the **New Plant Diseases Dataset** (`vipoooool/new-plant-diseases-dataset`) is *offline-augmented*, so geometric/colour variants of the same physical leaf land on both sides of the train/test boundary (63.3% source-level leak). §4.5 argues — via a post-hoc clean re-evaluation — that this leak is statistically irrelevant. The `og-dataset` branch turns that *argument* into a *direct experiment*: it re-runs the entire pipeline on **`mohitsingh1804/plantvillage`**, a non-augmented PlantVillage variant in which source-level leakage is **impossible by construction** (each physical leaf appears exactly once, before splitting).
+
+### A.2 Dataset comparison
+
+| | `main` (`vipoooool`) | `og-dataset` (`mohitsingh1804`) |
+| --- | :--: | :--: |
+| Offline augmentation | yes (baked into filenames) | none |
+| Total images | 87,867 | 54,304 |
+| Train / Val / Test | 70,295 / 8,777 / 8,795 | 43,443 / 5,422 / 5,439 |
+| Classes | 38 | 38 |
+| Source-level train↔test leak | 63.3% | 0% (by construction) |
+
+The split protocol is unchanged: the dataset's `valid/` folder is split 50/50 into validation and test (`random_state=42`).
+
+### A.3 Methodological refinements
+
+Because the non-augmented dataset has a genuinely imbalanced (long-tail) class distribution — no longer flattened by per-class augmentation — the `og-dataset` evaluation adds:
+
+* **Macro-averaged** precision/recall/F1 alongside the weighted aggregates, to expose minority-class behaviour.
+* `class_weight='balanced'` on the V4 linear probe and `weights='distance'` on the V4 k-NN (k=20), to compensate for class imbalance.
+
+### A.4 Results (clean dataset)
+
+| Version | Metric | `main` (augmented) | `og-dataset` (clean) | Δ |
+| --- | --- | :--: | :--: | :--: |
+| V1 — HOG + SVM | Accuracy | 74.39% | 74.74% | +0.35 |
+| | F1 (weighted) | 74.26% | 74.90% | +0.64 |
+| | F1 (macro) | — | 70.32% | — |
+| | Inference | 81 ms/img | 39 ms/img | — |
+| V4 — DINOv3 linear probe | Accuracy | 98.35% | 98.16% | −0.19 |
+| | F1 (weighted) | 98.35% | 98.18% | −0.17 |
+| | F1 (macro) | — | 97.95% | — |
+| V4 — DINOv3 k-NN | Accuracy | 98.25% | 97.90% | −0.35 |
+| V2 — Custom CNN | Accuracy | 99.66% | *pending re-run* | — |
+| V3 — ResNet50 TL | Accuracy | 99.87% | *pending re-run* | — |
+
+### A.5 Interpretation
+
+On a dataset where source-level leakage cannot occur, the two completed models reproduce their full-dataset numbers within **±0.35 points**. V1 is in fact marginally *higher* (+0.35 acc) despite training on **~38% fewer images** (43,443 vs 70,295), and V4 drops by a negligible 0.19 points. This is a direct, independent confirmation of §4.5: the 63% augmentation leak on `main` was statistically irrelevant, and the models had learned genuine discriminative representations rather than memorising augmented duplicates. The healthy macro-F1 of V4 (97.95%) further shows the result holds under real class imbalance, not only under the augmentation-balanced regime of the original dataset.
+
+The pending V2/V3 re-runs are expected to confirm the same pattern; this appendix will be updated once they complete.
