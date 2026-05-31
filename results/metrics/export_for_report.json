@@ -1,9 +1,9 @@
 {
   "meta": {
     "project": "Plant Disease Detection",
-    "generated": "2026-05-31T11:27:33",
-    "dataset": "New Plant Diseases Dataset (PlantVillage augmentato, 87.867 immagini, 38 classi)",
-    "split": "train 70.295 / val 8.777 / test 8.795 (\u2248 80/10/10, valid/ diviso 50/50, seed=42)"
+    "generated": "2026-05-31T11:44:13",
+    "dataset": "New Plant Diseases Dataset (augmented PlantVillage, 87,867 images, 38 classes)",
+    "split": "train 70,295 / val 8,777 / test 8,795 (\u2248 80/10/10, valid/ split 50/50, seed=42)"
   },
   "versions": {
     "v1": {

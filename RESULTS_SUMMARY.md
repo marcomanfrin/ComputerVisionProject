@@ -1,13 +1,13 @@
 # Plant Disease Detection — Results Summary
 
-_Generated: 2026-05-31 11:27_
+_Generated: 2026-05-31 11:44_
 
-Dataset: **New Plant Diseases Dataset** (PlantVillage augmentato, 87.867 immagini, 38 classi)  
-Split: train 70.295 / val 8.777 / test 8.795 (≈ 80/10/10, valid/ diviso 50/50 con seed=42)
+Dataset: **New Plant Diseases Dataset** (augmented PlantVillage, 87,867 images, 38 classes)  
+Split: train 70,295 / val 8,777 / test 8,795 (≈ 80/10/10, valid/ split 50/50 with seed=42)
 
-## Tabella Metriche (test set)
+## Metrics Table (test set)
 
-| Versione | Approccio | Accuracy | Precision | Recall | F1 |
+| Version | Approach | Accuracy | Precision | Recall | F1 |
 |----------|-----------|:--------:|:---------:|:------:|:--:|
 | V1 — HOG + SVM | Shallow Learning | 74.39% | 74.62% | 74.39% | 74.26% |
 | V2 — Custom CNN | Deep Learning from scratch | 99.66% | 99.66% | 99.66% | 99.66% |
@@ -16,27 +16,27 @@ Split: train 70.295 / val 8.777 / test 8.795 (≈ 80/10/10, valid/ diviso 50/50 
 
 ## Key Findings
 
-- **Migliore overall:** V3 — ResNet50 Transfer Learn. — accuracy 99.87%, F1 99.87%
-- **Gap V1 → V3:** +25.5 punti di accuracy. La feature extraction manuale (HOG) collassa rispetto a feature apprese end-to-end.
-- **V4 SSL competitivo senza training:** 98.35% di accuracy con backbone **completamente congelato** (0 parametri trainable nel backbone). Solo k-NN o un logistic regression sopra le feature.
-- **Transfer learning più veloce di un custom CNN:** V3 converge in 19 epoch (~128 min) vs V2 80 epoch (~294 min).
-- **V4 k-NN vs Linear Probe:** k-NN 98.25% vs LinProbe 98.35%. Il linear probe sfrutta meglio la struttura globale dello spazio di feature.
+- **Best overall:** V3 — ResNet50 Transfer Learn. — accuracy 99.87%, F1 99.87%
+- **Gap V1 → V3:** +25.5 accuracy points. Manual feature extraction (HOG) collapses compared to features learned end-to-end.
+- **V4 SSL competitive without training:** 98.35% accuracy with a **completely frozen** backbone (0 trainable parameters in the backbone). Just k-NN or a logistic regression on top of the features.
+- **Transfer learning faster than a custom CNN:** V3 converges in 19 epochs (~128 min) vs V2 80 epochs (~294 min).
+- **V4 k-NN vs Linear Probe:** k-NN 98.25% vs LinProbe 98.35%. The linear probe exploits the global structure of the feature space better.
 
-> ⚠️ **Nota sull'augmentation:** il dataset è augmentato offline, quindi varianti augmentate della stessa foglia sorgente possono finire sia in train sia in val/test. Questo gonfia probabilmente le accuracy assolute (>99%) e va letto come caveat sui risultati.
+> ⚠️ **Note on augmentation:** the dataset is augmented offline, so augmented variants of the same source leaf can end up in both train and val/test. This likely inflates the absolute accuracies (>99%) and should be read as a caveat on the results.
 
-## Raccomandazioni per il Deployment
+## Deployment Recommendations
 
-| Scenario | Versione consigliata | Motivazione |
+| Scenario | Recommended version | Rationale |
 |----------|----------------------|-------------|
-| Max accuracy, dataset fisso | **V3 (ResNet50 TL)** | Best score assoluto, parametri ragionevoli (~24M totali). |
-| Onboarding rapido di nuove classi | **V4 (DINOv3 + linear probe)** | Backbone congelato, basta riaddestrare il logistic regression in secondi. |
-| Edge / CPU-only / interpretabilità | **V1 (HOG+SVM)** | Modello piccolo, ispezionabile, ma accuracy ~75%. |
-| Custom architecture per ricerca / didattica | **V2 (CNN from scratch)** | Pieno controllo dell'architettura, ottimo per oral exam. |
+| Max accuracy, fixed dataset | **V3 (ResNet50 TL)** | Best absolute score, reasonable parameters (~24M total). |
+| Fast onboarding of new classes | **V4 (DINOv3 + linear probe)** | Frozen backbone, just retrain the logistic regression in seconds. |
+| Edge / CPU-only / interpretability | **V1 (HOG+SVM)** | Small, inspectable model, but ~75% accuracy. |
+| Custom architecture for research / teaching | **V2 (CNN from scratch)** | Full control of the architecture, great for the oral exam. |
 
-## Riproducibilità
+## Reproducibility
 
-- Seed fissato (`random_state=42`) su split, sklearn, torch.
-- Notebook ordinati: `00_setup_and_data` → `06_prepare_documentation`.
-- Dipendenze in `requirements.txt`. V4 richiede `transformers` + login HuggingFace per DINOv3.
-- Checkpoints in `results/models/<version>/` (esclusi da git tramite `.gitignore`).
-- Cache embedding V4 in `results/models/v4_dinov3_probe/embeddings/*.npz` (rigenerabili in ~13 min).
+- Fixed seed (`random_state=42`) on split, sklearn, torch.
+- Ordered notebooks: `00_setup_and_data` → `06_prepare_documentation`.
+- Dependencies in `requirements.txt`. V4 requires `transformers` + HuggingFace login for DINOv3.
+- Checkpoints in `results/models/<version>/` (excluded from git via `.gitignore`).
+- V4 embedding cache in `results/models/v4_dinov3_probe/embeddings/*.npz` (regenerable in ~13 min).
