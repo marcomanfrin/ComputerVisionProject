@@ -270,9 +270,25 @@ V4 errors concentrate on the same biologically ambiguous pairs as V3, plus a sma
 
 ## 6. Ethical Considerations
 
-### Dataset Bias
+### 6.1 Dataset Bias
 
-PlantVillage was collected under **controlled laboratory conditions**: uniform backgrounds, even lighting, single leaves per image. Models trained exclusively on PlantVillage show known **degradation when deployed on real-field photographs** with cluttered backgrounds, multiple leaves, occlusions, and variable lighting (Mohanty et al., 2016; Ferentinos, 2018). A production system would require domain adaptation or additional in-field training data.
+PlantVillage was collected under **controlled laboratory conditions**: uniform backgrounds, even lighting, single detached leaves per image. Models trained exclusively on PlantVillage show known **degradation when deployed on real-field photographs** with cluttered backgrounds, multiple leaves, occlusions, and variable lighting (Mohanty et al., 2016; Ferentinos, 2018). The >98% test accuracies reported here are therefore an *upper bound* measured in-distribution; they do not transfer one-to-one to field conditions, and the leak analysis in §4.5 already shows how easily a benchmark number can encode dataset artefacts rather than generalisable skill. A production system would require domain adaptation, in-field training data, and a confidence-aware abstention mechanism that defers uncertain cases to a human agronomist instead of returning a high-confidence wrong label.
+
+### 6.2 Geographic and Crop Coverage Bias
+
+The dataset spans **14 crop species** and 38 health states, but these reflect the agricultural priorities of the regions where PlantVillage was assembled (predominantly North-American and European staple and cash crops). Many staples central to food security in sub-Saharan Africa and South-East Asia — cassava, millet, plantain, yam — are **absent**. A tool marketed as "plant disease detection" but silently restricted to these 38 classes risks a **representation harm**: a smallholder photographing an out-of-vocabulary crop will still receive one of the 38 in-vocabulary predictions (the softmax always sums to one), producing a confident but meaningless diagnosis. Deployment must therefore expose the supported crop list explicitly and reject inputs that fall outside the training distribution rather than forcing a prediction.
+
+### 6.3 Privacy
+
+Leaf close-ups appear innocuous, but field photographs captured on farmers' smartphones routinely carry **EXIF metadata** — GPS coordinates, timestamps, device identifiers — that can localise an individual farm and, by extension, infer yield, disease pressure, or economic vulnerability of an identifiable owner. Aggregated, such data is commercially sensitive (it can inform commodity speculation or targeted advertising) and, under regimes such as the GDPR, geolocation tied to a natural person is personal data. A responsible pipeline should **strip EXIF on ingestion**, process imagery on-device where feasible, and obtain informed consent before any cloud upload or retention. None of the models in this study require location metadata, so discarding it costs nothing in accuracy.
+
+### 6.4 Environmental Footprint
+
+Training is not free. V2 consumed ~294 min and V3 ~128 min of sustained GPU/accelerator compute; embedding extraction for V4 added ~12.5 min. While modest in absolute terms, the comparison itself argues for **efficiency-aware model selection**: V4 reaches ~99% of V3's accuracy with roughly one-tenth of the wall-clock cost and **zero backbone training**, and onboarding a new class means re-fitting a logistic regression in seconds rather than retraining a network. For a tool intended to scale to millions of low-margin smallholder users, the foundation-model-plus-linear-probe recipe is also the **lowest-carbon** option, and re-using a frozen pre-trained backbone amortises a one-time pre-training cost across all downstream users.
+
+### 6.5 Accountability in Deployment
+
+An automated diagnosis can drive real agronomic decisions — pesticide application, crop destruction, treatment purchases — with economic and ecological consequences. An over-confident false positive may trigger **unnecessary pesticide use** (environmental and financial harm); a false negative may let a treatable outbreak spread. Because §5 shows residual errors cluster on *biologically plausible* confusions within the same crop, the failure mode is rarely absurd but is still actionable in the wrong direction. The system should be positioned as **decision support, not a replacement for expert judgement**, surface calibrated uncertainty, and make clear that liability for any intervention remains with the human user.
 
 ---
 

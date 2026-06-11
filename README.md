@@ -177,11 +177,11 @@ The Kaggle dataset is offline-augmented: each source leaf is duplicated under ro
 
 [`Technical_Analysis.md`](Technical_Analysis.md) (≤10 pages when rendered to PDF) covers:
 
-1. Problem statement and motivation
-2. Methodology — V1 to V4 architectures and training recipes
-3. Experimental results — tables, training curves, confusion matrices
-4. Failure analysis — per-version failure modes and biologically plausible errors
-5. Ethical considerations — dataset bias, geographic coverage, privacy, environmental footprint
+1. Problem statement and motivation (§1)
+2. Methodology — V1 to V4 architectures and training recipes (§2–3)
+3. Experimental results — tables, training curves, confusion matrices, leak analysis (§4)
+4. Failure analysis — per-version failure modes and biologically plausible errors (§5)
+5. Ethical considerations — dataset bias, geographic coverage, privacy, environmental footprint (§6)
 
 ---
 
