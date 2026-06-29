@@ -9,7 +9,7 @@
 
 ## Abstract
 
-This work presents a comparative analysis of four progressively more sophisticated approaches to plant disease classification on the **New Plant Diseases Dataset** — an offline-augmented version of PlantVillage (87,867 images, 38 classes). We benchmark (i) a classical handcrafted pipeline (HOG + SVM), (ii) a custom CNN trained from scratch, (iii) a fine-tuned ResNet50 (supervised transfer learning), and (iv) a frozen DINOv3 ViT-B/16 backbone with a linear probe (self-supervised foundation model). Results show that all deep approaches surpass 98% accuracy on the held-out test set, with the supervised fine-tuned ResNet50 reaching **99.87%**, while the frozen DINOv3 backbone with a linear probe achieves **98.35%** with **zero trainable backbone parameters**, validating the practical value of modern foundation models for efficient domain adaptation.
+This work presents a comparative analysis of four approaches  progressively more sophisticated, to plant disease classification on the **New Plant Diseases Dataset** — an offline-augmented version of PlantVillage (87,867 images, 38 classes). We benchmark (i) a classical handcrafted pipeline (HOG + SVM), (ii) a custom CNN trained from scratch, (iii) a fine-tuned ResNet50 (supervised transfer learning), and (iv) a frozen DINOv3 ViT-B/16 backbone with a linear probe (self-supervised foundation model). Results show that every deep approach surpasses 98% accuracy on the held-out test set with the supervised fine-tuned ResNet50 and it reaches **99.87%**. On the other side the frozen DINOv3 backbone with a linear probe achieves **98.35%** with **zero trainable backbone parameters**. It validates the practical value of modern foundation models for efficient domain adaptation.
 
 ---
 
@@ -17,7 +17,7 @@ This work presents a comparative analysis of four progressively more sophisticat
 
 ### 1.1 Motivation
 
-Plant diseases are a major cause of crop loss worldwide, with estimates from the FAO indicating that 20–40% of global crop yield is lost to pests and pathogens every year. Early detection is the single most effective mitigation strategy, but traditional in-field diagnosis requires expert agronomists whose availability is scarce, especially in developing regions where smallholder farms dominate. An automated, image-based classification system deployable on commodity smartphones can democratize access to expert-level diagnosis and enable timely interventions.
+Plant diseases are one of the major causes of crop loss worldwide. Estimates from the FAO indicate that 20–40% of global crop yield is lost to pests and pathogens every year. Early detection is the most effective mitigation strategy, otherwise traditional in-field diagnosis requires expert agronomists whose availability is poor,  especially in developing regions where smallholder farms dominate. An automated, image-based classification system deployable on commodity smartphones can democratize access to expert-level diagnosis and enable timely interventions.
 
 ### 1.2 Computer Vision Framing
 
@@ -25,27 +25,27 @@ The problem maps to a **fine-grained multi-class classification** task. Compared
 
 1. **Visual similarity across classes:** different diseases on the same plant species often share macroscopic symptoms (chlorosis, necrosis, lesions).
 2. **High intra-class variability:** symptom severity, leaf age, and lighting introduce strong intra-class noise.
-3. **Long-tail class distribution:** some diseases are heavily over-represented in public datasets, while rare ones are under-sampled.
+3. **Long-tail class distribution:** some diseases are heavily over-represented in public datasets, unlike rare ones are under-sampled.
 
 ### 1.3 Research Questions
 
 The project is designed to address three concrete questions that mirror the course modules:
 
-* **RQ1 — Feature representation:** how much accuracy is left on the table when relying on handcrafted features (HOG) instead of learned representations?
-* **RQ2 — Architecture vs. pre-training:** for a relatively constrained dataset, what matters more — a carefully designed custom CNN or transfer from ImageNet-pretrained backbones?
+* **RQ1 — Feature representation:** how much accuracy is left on the table when relying on handcrafted features (HOG), instead of learned representations?
+* **RQ2 — Architecture vs. pre-training:** which of the following architectures matters more for a relatively constrained dataset: a carefully designed custom CNN or a transfer from ImageNet-pretrained backbones?
 * **RQ3 — Self-supervised foundation models:** can a frozen vision foundation model (DINOv3) match supervised fine-tuning while requiring zero trainable backbone parameters?
 
 ---
 
 ## 2. Methodology
 
-We implement four versions (V1–V4) covering the spectrum from classical computer vision to modern self-supervised learning. All versions share the same data splits and evaluation protocol to ensure a fair comparison.
+We implement four versions (V1–V4) that cover the spectrum from classical computer vision to modern self-supervised learning. All versions share the same data splits and evaluation protocol to ensure a fair comparison.
 
 ### 2.1 Dataset and Preprocessing
 
 * **Dataset:** New Plant Diseases Dataset (Kaggle, *vipoooool*) — an offline-augmented derivative of PlantVillage (Mohanty et al., 2016). 87,867 RGB images, 38 classes (14 crops × healthy + disease variants).
 * **Split:** the dataset ships with a fixed `train/` folder (70,295 images) and a `valid/` folder (17,572 images); we split the latter 50/50 (`random_state=42`) into validation (8,777) and test (8,795). Effective split ≈ 80% / 10% / 10%.
-* **Note on augmentation:** because augmentation is baked into the dataset offline, augmented variants of the same source leaf may fall on both sides of the train/validation boundary. This likely inflates the absolute accuracies reported below and should be read as a caveat on the >99% figures.
+* **Note on augmentation:** Since augmentation is baked into the dataset offline, the augmented variants of the same source leaf may fall on both sides of the train/validation boundary. This likely inflates the absolute accuracies reported below and should be read as a caveat on the >99% figures.
 * **Image size:** images are 256×256, resized depending on the model (64×128 for V1 HOG, 224×224 for V2/V3, 224×224 with ImageNet normalization for V4).
 * **Augmentations (V2/V3, training only):** RandomRotation(±15°), RandomHorizontalFlip(p=0.5), ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2), RandomAffine(translate=0.1).
 
@@ -140,11 +140,11 @@ All versions are evaluated on the same held-out test set (8,795 images) using:
 
 ### 4.2 Discussion by Research Question
 
-**RQ1 — Handcrafted vs. learned features.** The gap between V1 (74.4%) and the deep models (>98%) is **>24 percentage points**. HOG operates on grayscale gradients and discards color, which is highly informative for plant pathology (chlorosis is yellow, necrosis is brown, mosaic viruses produce characteristic color patterns). The SVM cannot recover information the descriptor never encoded.
+**RQ1 — Handcrafted vs. learned features.** The gap between V1 (74.4%) and the deep models (>98%) is **>24 percentage points**. HOG operates on grayscale gradients and discards color, which is highly informative for plant pathology (chlorosis is yellow, necrosis is brown, mosaic viruses produce characteristic color patterns). The SVM cannot recover information, that the descriptor never encoded.
 
 **RQ2 — Architecture vs. pre-training.** V3 (ResNet50 TL) outperforms V2 (Custom CNN) by 0.21 points (99.87 vs. 99.66), but with **24× more trainable parameters**. Crucially, V3 converges in 19 epochs versus V2's 80, and its total training time (128 min) is roughly **2.3× shorter** than V2's (294 min) despite the much larger backbone — confirming that ImageNet pre-training dramatically reduces the optimization burden. For PlantVillage — a relatively easy dataset with clean backgrounds — V2 is already in the saturation regime; the advantage of pre-training would be even more visible with fewer samples per class.
 
-**RQ3 — Self-supervised foundation model.** V4 reaches 98.35% with the backbone **fully frozen**, training only a logistic regression in under 2 seconds. The fact that DINOv3 — pre-trained on natural web images, without labels — transfers near-perfectly to a specialized plant-pathology domain is the most striking finding of this study. The k-NN classifier (98.25%) almost matches the linear probe (98.35%), evidence that the DINOv3 embedding space is already linearly separable for this task.
+**RQ3 — Self-supervised foundation model.** V4 reaches 98.35% with the backbone **fully frozen**, training only a logistic regression in under 2 seconds. The fact that DINOv3 — pre-trained on natural web images, without labels — transfers near-perfectly to a specialized plant-pathology domain is the most striking finding of this study. The k-NN classifier (98.25%) matches  almost the linear probe (98.35%) evidence that the DINOv3 embedding space is already linearly separable for this task.
 
 ### 4.3 Training Dynamics
 
@@ -203,7 +203,7 @@ So **5,732 of 8,795 test images (65.2%)** share their source identity with at le
 <p align="center"><img src="results/plots/clean_vs_full_test.png" alt="Clean vs. full test accuracy" width="60%"></p>
 *Figure 16 — Accuracy on FULL / LEAKED / CLEAN / NON-AUG subsets of the test set. For V3 and V4 the CLEAN accuracy is marginally higher than FULL.*
 
-**Interpretation.** The clean accuracy differs from the full-test accuracy by at most **0.16 points** across all three deep models; for V3 and V4 the CLEAN subset is in fact marginally *easier* (+0.03 and +0.02 respectively). The offline augmentations are precisely the geometric / colour invariances a deep visual backbone learns to discard — observing a 90°-rotated copy of a leaf in train provides no additional discriminative signal beyond what the same leaf at 0° would. The 63% source-level leak is therefore *statistically irrelevant* for the published accuracies on this task; the models have learned a genuine representation rather than memorising augmented duplicates.
+**Interpretation.** The clean accuracy differs from the full-test accuracy by at most **0.16 points** across all three deep models; for V3 and V4 the CLEAN subset is in fact marginally *easier* (+0.03 and +0.02 respectively). The offline augmentations are precisely the geometric / colour invariances, a deep visual backbone learns to discard — observing a 90°-rotated copy of a leaf in train, it doesn’t provide  additional discriminative signal, than the same leaf at 0° would. The 63% source-level leak is, therefore, *statistically irrelevant* for the published accuracies on this task; the models learned a genuine representation, rather than memorising augmented duplicates.
 
 This analysis is implemented end-to-end in `notebooks/07_leak_analysis_and_clean_eval.ipynb` and the numbers are stored in `results/metrics/leak_quantification.json` and `results/metrics/clean_test_metrics.json`.
 
@@ -252,7 +252,7 @@ Inspecting misclassified samples reveals that the worst-performing classes are s
 
 ### 5.3 V4 — Failure Modes
 
-V4 errors concentrate on the same biologically ambiguous pairs as V3, plus a small additional gap on classes whose visual features lie far from DINOv3's natural-image pre-training distribution (e.g. highly stylized macro shots). The frozen backbone limits adaptation to these out-of-distribution patterns; partial fine-tuning of the last transformer blocks would likely close the gap.
+V4 errors concentrate on the same biologically ambiguous pairs as V3, with a small additional gap on classes whose visual features lie far from DINOv3's natural-image pre-training distribution (e.g. highly stylized macro shots). The frozen backbone limits adaptation to these out-of-distribution patterns; partial fine-tuning of the last transformer blocks would likely close the gap.
 
 <p align="center"><img src="results/plots/v4_f1_per_class.png" alt="V4 per-class F1" width="50%"></p>
 *Figure 13 — V4 per-class F1, mean ~98.3% with no class below 0.85.*
@@ -272,15 +272,15 @@ V4 errors concentrate on the same biologically ambiguous pairs as V3, plus a sma
 
 ### 6.1 Dataset Bias
 
-PlantVillage was collected under **controlled laboratory conditions**: uniform backgrounds, even lighting, single detached leaves per image. Models trained exclusively on PlantVillage show known **degradation when deployed on real-field photographs** with cluttered backgrounds, multiple leaves, occlusions, and variable lighting (Mohanty et al., 2016; Ferentinos, 2018). The >98% test accuracies reported here are therefore an *upper bound* measured in-distribution; they do not transfer one-to-one to field conditions, and the leak analysis in §4.5 already shows how easily a benchmark number can encode dataset artefacts rather than generalisable skill. A production system would require domain adaptation, in-field training data, and a confidence-aware abstention mechanism that defers uncertain cases to a human agronomist instead of returning a high-confidence wrong label.
+PlantVillage was collected under **controlled laboratory conditions**: uniform backgrounds, even lighting, single detached leaves per image. Models trained exclusively on PlantVillage show a phenomenon known as **degradation when deployed on real-field photographs** with cluttered backgrounds, multiple leaves, occlusions, and variable lighting (Mohanty et al., 2016; Ferentinos, 2018). The >98% test accuracies reported here are therefore an *upper bound* measured in-distribution; they do not transfer one-to-one to field conditions. Furthermore the leak analysis in §4.5 already shows how easily a benchmark number can encode dataset artefacts rather than generalisable skill. A production system would require domain adaptation, in-field training data, and a confidence-aware abstention mechanism that defers uncertain cases to a human agronomist instead of returning a high-confidence wrong label.
 
 ### 6.2 Geographic and Crop Coverage Bias
 
-The dataset spans **14 crop species** and 38 health states, but these reflect the agricultural priorities of the regions where PlantVillage was assembled (predominantly North-American and European staple and cash crops). Many staples central to food security in sub-Saharan Africa and South-East Asia — cassava, millet, plantain, yam — are **absent**. A tool marketed as "plant disease detection" but silently restricted to these 38 classes risks a **representation harm**: a smallholder photographing an out-of-vocabulary crop will still receive one of the 38 in-vocabulary predictions (the softmax always sums to one), producing a confident but meaningless diagnosis. Deployment must therefore expose the supported crop list explicitly and reject inputs that fall outside the training distribution rather than forcing a prediction.
+The dataset spans **14 crop species** and 38 health states. These reflect the agricultural priorities of the regions where PlantVillage was assembled (predominantly North-American and European staple and cash crops), also many staples central to food security in sub-Saharan Africa and South-East Asia — cassava, millet, plantain, yam — are **absent**. A tool marketed as "plant disease detection" but silently restricted to these 38 classes risks a **representation harm**: a smallholder photographing an out-of-vocabulary crop will still receive one of the 38 in-vocabulary predictions (the softmax always sums to one), producing a confident but meaningless diagnosis. Therefore, deployment must expose the supported crop list explicitly and reject inputs that fall outside the training distribution rather than forcing a prediction.
 
 ### 6.3 Privacy
 
-Leaf close-ups appear innocuous, but field photographs captured on farmers' smartphones routinely carry **EXIF metadata** — GPS coordinates, timestamps, device identifiers — that can localise an individual farm and, by extension, infer yield, disease pressure, or economic vulnerability of an identifiable owner. Aggregated, such data is commercially sensitive (it can inform commodity speculation or targeted advertising) and, under regimes such as the GDPR, geolocation tied to a natural person is personal data. A responsible pipeline should **strip EXIF on ingestion**, process imagery on-device where feasible, and obtain informed consent before any cloud upload or retention. None of the models in this study require location metadata, so discarding it costs nothing in accuracy.
+Leaf close-ups appear innocuous, but field photographs captured on farmers' smartphones routinely carry **EXIF metadata** — GPS coordinates, timestamps, device identifiers — that can localise an individual farm and, by extension, infer yield, disease pressure, or economic vulnerability of an identifiable owner. Aggregated data is commercially sensitive (it can inform commodity speculation or targeted advertising) and, under regimes such as the GDPR, geolocation tied to a natural person is personal data. A responsible pipeline should **strip EXIF on ingestion**, process imagery on-device where feasible, and obtain informed consent before any cloud upload or retention. None of the models in this study require location metadata, so discarding it costs nothing in accuracy.
 
 ### 6.4 Environmental Footprint
 
@@ -288,7 +288,7 @@ Training is not free. V2 consumed ~294 min and V3 ~128 min of sustained GPU/acce
 
 ### 6.5 Accountability in Deployment
 
-An automated diagnosis can drive real agronomic decisions — pesticide application, crop destruction, treatment purchases — with economic and ecological consequences. An over-confident false positive may trigger **unnecessary pesticide use** (environmental and financial harm); a false negative may let a treatable outbreak spread. Because §5 shows residual errors cluster on *biologically plausible* confusions within the same crop, the failure mode is rarely absurd but is still actionable in the wrong direction. The system should be positioned as **decision support, not a replacement for expert judgement**, surface calibrated uncertainty, and make clear that liability for any intervention remains with the human user.
+An automated diagnosis can drive real agronomic decisions — pesticide application, crop destruction, treatment purchases — with economic and ecological consequences. An over-confident false positive may trigger **unnecessary pesticide use** (environmental and financial harm); a false negative may let a treatable outbreak spread. Because §5 shows residual errors cluster on *biologically plausible* confusions within the same crop, the failure mode is rarely absurd, but is still actionable in the wrong direction. The system should be positioned as **decision support, not a replacement for expert judgement**, surface calibrated uncertainty, and make clear that liability for any intervention remains with the human user.
 
 ---
 
