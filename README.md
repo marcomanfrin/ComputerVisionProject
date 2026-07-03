@@ -90,6 +90,10 @@ conda activate cv-project
 | scikit-learn | 1.3+ | V1, V4 |
 | transformers + huggingface-hub | 4.45+ / 0.24+ | V4 (DINOv3) |
 
+### Kaggle credentials (dataset download)
+
+Notebook `00` downloads the dataset via the Kaggle API. Create an API token from your [Kaggle account settings](https://www.kaggle.com/settings) and place it at `~/.kaggle/kaggle.json` before running it.
+
 ### V4-only — HuggingFace authentication
 
 DINOv3 weights are gated. Before running notebook `04`:
@@ -118,6 +122,7 @@ jupyter notebook notebooks/
 | 5 | `04_v4_dinov3_probe` | cached embeddings + `v4_metrics.json` |
 | 6 | `05_comparison_and_analysis` | `comparison_table.csv`, `summary_table.csv`, comparison plots |
 | 7 | `06_prepare_documentation` | regenerates `RESULTS_SUMMARY.md` and `export_for_report.json` |
+| 8 | `07_leak_analysis_and_clean_eval` | `leak_quantification.json`, `clean_test_metrics.json`, leak plots |
 
 Notebooks `02`, `03`, `04` benefit from a CUDA-enabled GPU but fall back to CPU.
 

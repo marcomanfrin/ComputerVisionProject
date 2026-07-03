@@ -42,6 +42,8 @@ dependencies:
     - transformers>=4.45.0
     - huggingface-hub>=0.24.0
     - safetensors>=0.4.0
+    # Dataset download (notebook 00 — requires ~/.kaggle/kaggle.json credentials)
+    - kaggle>=1.6.0
     # Dev / Quality
     - black>=23.0.0
     - flake8>=6.1.0
